@@ -1,3 +1,36 @@
+# Please try and keep this file organized by alphabetical order. Single files first, then directories.
+/.env
+/.env.development.php
+/.env.php
+
+
+/docs/_build
+/error_log
+/auth.json
+/ninja.sublime-project
+/ninja.sublime-workspace
+/.phpstorm.meta.php
+/_ide_helper.php
+
+/.idea
+/.project
+_ide_helper.php
+
+
+
+Homestead.yaml
+Homestead.json
+/config/lfm.php
+/nbproject/private/
+/node_modules
+/public/error_log
+/public/lb-faveo/media/
+/public/uploads
+/public/photos/
+/app/FaveoJob
+/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php
+/storage/app/attachments
+/nbproject/
 /config/staging
 /config/development
 /config/production
@@ -16,20 +49,8 @@
 /node_modules
 /.DS_Store
 Thumbs.db
-/.env
-/.env.development.php
-/.env.php
-/docs/_build
-/error_log
-/auth.json
-/ninja.sublime-project
-/ninja.sublime-workspace
-/.phpstorm.meta.php
-/_ide_helper.php
-/.env
-/.idea
-/.project
-_ide_helper.php
+
+
 
 /public/error_log
 
@@ -40,4 +61,4 @@ tests/_support/_generated/
 # composer stuff
 /c3.php
 
-/*.env
+
