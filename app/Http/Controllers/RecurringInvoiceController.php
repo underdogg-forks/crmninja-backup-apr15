@@ -23,7 +23,6 @@ class RecurringInvoiceController extends BaseController
     public function __construct(InvoiceRepository $invoiceRepo)
     {
         //parent::__construct();
-
         $this->invoiceRepo = $invoiceRepo;
     }
 
@@ -33,11 +32,10 @@ class RecurringInvoiceController extends BaseController
     public function index()
     {
         $data = [
-            'title' => trans('texts.recurring_invoices'),
-            'entityType' => ENTITY_RECURRING_INVOICE,
-            'datatable' => new RecurringInvoiceDatatable(),
+          'title' => trans('texts.recurring_invoices'),
+          'entityType' => ENTITY_RECURRING_INVOICE,
+          'datatable' => new RecurringInvoiceDatatable(),
         ];
-
         return response()->view('list_wrapper', $data);
     }
 }

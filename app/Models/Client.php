@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasCustomMessages;
 use Carbon;
 use DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laracasts\Presenter\PresentableTrait;
-use App\Models\Traits\HasCustomMessages;
 use Utils;
 
 /**
@@ -32,38 +32,38 @@ class Client extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'name',
-        'id_number',
-        'vat_number',
-        'work_phone',
-        'custom_value1',
-        'custom_value2',
-        'address1',
-        'address2',
-        'city',
-        'state',
-        'postal_code',
-        'country_id',
-        'private_notes',
-        'size_id',
-        'industry_id',
-        'currency_id',
-        'language_id',
-        'payment_terms',
-        'website',
-        'invoice_number_counter',
-        'quote_number_counter',
-        'public_notes',
-        'task_rate',
-        'shipping_address1',
-        'shipping_address2',
-        'shipping_city',
-        'shipping_state',
-        'shipping_postal_code',
-        'shipping_country_id',
-        'show_tasks_in_portal',
-        'send_reminders',
-        'custom_messages',
+      'name',
+      'id_number',
+      'vat_number',
+      'work_phone',
+      'custom_value1',
+      'custom_value2',
+      'address1',
+      'address2',
+      'city',
+      'state',
+      'postal_code',
+      'country_id',
+      'private_notes',
+      'size_id',
+      'industry_id',
+      'currency_id',
+      'language_id',
+      'payment_terms',
+      'website',
+      'invoice_number_counter',
+      'quote_number_counter',
+      'public_notes',
+      'task_rate',
+      'shipping_address1',
+      'shipping_address2',
+      'shipping_city',
+      'shipping_state',
+      'shipping_postal_code',
+      'shipping_country_id',
+      'show_tasks_in_portal',
+      'send_reminders',
+      'custom_messages',
     ];
 
     /**
@@ -72,28 +72,28 @@ class Client extends EntityModel
     public static function getImportColumns()
     {
         return [
-            'name',
-            'work_phone',
-            'address1',
-            'address2',
-            'city',
-            'state',
-            'postal_code',
-            'public_notes',
-            'private_notes',
-            'country',
-            'website',
-            'currency',
-            'vat_number',
-            'id_number',
-            'custom1',
-            'custom2',
-            'contact_first_name',
-            'contact_last_name',
-            'contact_phone',
-            'contact_email',
-            'contact_custom1',
-            'contact_custom2',
+          'name',
+          'work_phone',
+          'address1',
+          'address2',
+          'city',
+          'state',
+          'postal_code',
+          'public_notes',
+          'private_notes',
+          'country',
+          'website',
+          'currency',
+          'vat_number',
+          'id_number',
+          'custom1',
+          'custom2',
+          'contact_first_name',
+          'contact_last_name',
+          'contact_phone',
+          'contact_email',
+          'contact_custom1',
+          'contact_custom2',
         ];
     }
 
@@ -103,24 +103,24 @@ class Client extends EntityModel
     public static function getImportMap()
     {
         return [
-            'first' => 'contact_first_name',
-            'last^last4' => 'contact_last_name',
-            'email' => 'contact_email',
-            'work|office' => 'work_phone',
-            'mobile|phone' => 'contact_phone',
-            'name|organization|description^card' => 'name',
-            'apt|street2|address2|line2' => 'address2',
-            'street|address1|line1^avs' => 'address1',
-            'city' => 'city',
-            'state|province' => 'state',
-            'zip|postal|code^avs' => 'postal_code',
-            'country' => 'country',
-            'public' => 'public_notes',
-            'private|note' => 'private_notes',
-            'site|website' => 'website',
-            'currency' => 'currency',
-            'vat' => 'vat_number',
-            'number' => 'id_number',
+          'first' => 'contact_first_name',
+          'last^last4' => 'contact_last_name',
+          'email' => 'contact_email',
+          'work|office' => 'work_phone',
+          'mobile|phone' => 'contact_phone',
+          'name|organization|description^card' => 'name',
+          'apt|street2|address2|line2' => 'address2',
+          'street|address1|line1^avs' => 'address1',
+          'city' => 'city',
+          'state|province' => 'state',
+          'zip|postal|code^avs' => 'postal_code',
+          'country' => 'country',
+          'public' => 'public_notes',
+          'private|note' => 'private_notes',
+          'site|website' => 'website',
+          'currency' => 'currency',
+          'vat' => 'vat_number',
+          'number' => 'id_number',
         ];
     }
 
@@ -143,14 +143,6 @@ class Client extends EntityModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function invoices()
-    {
-        return $this->hasMany('App\Models\Invoice');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function quotes()
     {
         return $this->hasMany('App\Models\Invoice')->where('invoice_type_id', '=', INVOICE_TYPE_QUOTE);
@@ -161,7 +153,8 @@ class Client extends EntityModel
      */
     public function publicQuotes()
     {
-        return $this->hasMany('App\Models\Invoice')->where('invoice_type_id', '=', INVOICE_TYPE_QUOTE)->whereIsPublic(true);
+        return $this->hasMany('App\Models\Invoice')->where('invoice_type_id', '=',
+          INVOICE_TYPE_QUOTE)->whereIsPublic(true);
     }
 
     /**
@@ -170,14 +163,6 @@ class Client extends EntityModel
     public function payments()
     {
         return $this->hasMany('App\Models\Payment');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function contacts()
-    {
-        return $this->hasMany('App\Models\Contact');
     }
 
     /**
@@ -261,35 +246,38 @@ class Client extends EntityModel
     public function addContact($data, $isPrimary = false)
     {
         $publicId = isset($data['public_id']) ? $data['public_id'] : (isset($data['id']) ? $data['id'] : false);
-
         // check if this client wasRecentlyCreated to ensure a new contact is
         // always created even if the request includes a contact id
-        if (! $this->wasRecentlyCreated && $publicId && $publicId != '-1') {
+        if (!$this->wasRecentlyCreated && $publicId && $publicId != '-1') {
             $contact = Contact::scope($publicId)->whereClientId($this->id)->firstOrFail();
         } else {
             $contact = Contact::createNew();
             $contact->send_invoice = true;
-
             if (isset($data['contact_key']) && $this->account->account_key == env('NINJA_LICENSE_ACCOUNT_KEY')) {
                 $contact->contact_key = $data['contact_key'];
             } else {
                 $contact->contact_key = strtolower(str_random(RANDOM_KEY_LENGTH));
             }
         }
-
         if ($this->account->isClientPortalPasswordEnabled()) {
-            if (! empty($data['password']) && $data['password'] != '-%unchanged%-') {
+            if (!empty($data['password']) && $data['password'] != '-%unchanged%-') {
                 $contact->password = bcrypt($data['password']);
             } elseif (empty($data['password'])) {
                 $contact->password = null;
             }
         }
-
         $contact->fill($data);
         $contact->is_primary = $isPrimary;
         $contact->email = trim($contact->email);
-
         return $this->contacts()->save($contact);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contacts()
+    {
+        return $this->hasMany('App\Models\Contact');
     }
 
     /**
@@ -301,10 +289,8 @@ class Client extends EntityModel
         if ($balanceAdjustment == 0 && $paidToDateAdjustment == 0) {
             return;
         }
-
         $this->balance = $this->balance + $balanceAdjustment;
         $this->paid_to_date = $this->paid_to_date + $paidToDateAdjustment;
-
         $this->save();
     }
 
@@ -322,9 +308,9 @@ class Client extends EntityModel
     public function getTotalCredit()
     {
         return DB::table('credits')
-                ->where('client_id', '=', $this->id)
-                ->whereNull('deleted_at')
-                ->sum('balance');
+          ->where('client_id', '=', $this->id)
+          ->whereNull('deleted_at')
+          ->sum('balance');
     }
 
     /**
@@ -341,8 +327,8 @@ class Client extends EntityModel
     public function getPrimaryContact()
     {
         return $this->contacts()
-                    ->whereIsPrimary(true)
-                    ->first();
+          ->whereIsPrimary(true)
+          ->first();
     }
 
     /**
@@ -353,13 +339,10 @@ class Client extends EntityModel
         if ($this->name) {
             return $this->name;
         }
-
-        if (! $this->contacts->count()) {
+        if (!$this->contacts->count()) {
             return '';
         }
-
         $contact = $this->contacts[0];
-
         return $contact->getDisplayName();
     }
 
@@ -369,7 +352,6 @@ class Client extends EntityModel
     public function getCityState()
     {
         $swap = $this->country && $this->country->swap_postal_code;
-
         return Utils::cityStateZip($this->city, $this->state, $this->postal_code, $swap);
     }
 
@@ -392,40 +374,16 @@ class Client extends EntityModel
     /**
      * @return bool
      */
-    public function addressesMatch()
-    {
-        $fields = [
-            'address1',
-            'address2',
-            'city',
-            'state',
-            'postal_code',
-            'country_id',
-        ];
-
-        foreach ($fields as $field) {
-            if ($this->$field != $this->{'shipping_' . $field}) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
     public function hasAddress($shipping = false)
     {
         $fields = [
-            'address1',
-            'address2',
-            'city',
-            'state',
-            'postal_code',
-            'country_id',
+          'address1',
+          'address2',
+          'city',
+          'state',
+          'postal_code',
+          'country_id',
         ];
-
         foreach ($fields as $field) {
             if ($shipping) {
                 $field = 'shipping_' . $field;
@@ -434,8 +392,28 @@ class Client extends EntityModel
                 return true;
             }
         }
-
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function addressesMatch()
+    {
+        $fields = [
+          'address1',
+          'address2',
+          'city',
+          'state',
+          'postal_code',
+          'country_id',
+        ];
+        foreach ($fields as $field) {
+            if ($this->$field != $this->{'shipping_' . $field}) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -453,27 +431,24 @@ class Client extends EntityModel
     /**
      * @return bool
      */
-    public function getGatewayToken()
-    {
-        $accountGateway = $this->account->getGatewayByType(GATEWAY_TYPE_TOKEN);
-
-        if (! $accountGateway) {
-            return false;
-        }
-
-        return AccountGatewayToken::clientAndGateway($this->id, $accountGateway->id)->first();
-    }
-
-    /**
-     * @return bool
-     */
     public function defaultPaymentMethod()
     {
         if ($token = $this->getGatewayToken()) {
             return $token->default_payment_method;
         }
-
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getGatewayToken()
+    {
+        $accountGateway = $this->account->getGatewayByType(GATEWAY_TYPE_TOKEN);
+        if (!$accountGateway) {
+            return false;
+        }
+        return AccountGatewayToken::clientAndGateway($this->id, $accountGateway->id)->first();
     }
 
     /**
@@ -485,10 +460,8 @@ class Client extends EntityModel
             if ($this->account->auto_bill_on_due_date) {
                 return true;
             }
-
             return $token->autoBillLater();
         }
-
         return false;
     }
 
@@ -508,11 +481,9 @@ class Client extends EntityModel
         if ($this->currency_id) {
             return $this->currency_id;
         }
-
-        if (! $this->account) {
+        if (!$this->account) {
             $this->load('account');
         }
-
         return $this->account->currency_id ?: DEFAULT_CURRENCY;
     }
 
@@ -524,11 +495,9 @@ class Client extends EntityModel
         if ($this->currency) {
             return $this->currency->code;
         }
-
-        if (! $this->account) {
+        if (!$this->account) {
             $this->load('account');
         }
-
         return $this->account->currency ? $this->account->currency->code : 'USD';
     }
 
@@ -537,14 +506,11 @@ class Client extends EntityModel
         if ($country = $this->country) {
             return $country->iso_3166_2;
         }
-
-        if (! $this->account) {
+        if (!$this->account) {
             $this->load('account');
         }
-
         return $this->account->country ? $this->account->country->iso_3166_2 : 'US';
     }
-
 
     /**
      * @param $isQuote
@@ -567,7 +533,16 @@ class Client extends EntityModel
      */
     public function hasAutoBillConfigurableInvoices()
     {
-        return $this->invoices()->whereIsPublic(true)->whereIn('auto_bill', [AUTO_BILL_OPT_IN, AUTO_BILL_OPT_OUT])->count() > 0;
+        return $this->invoices()->whereIsPublic(true)->whereIn('auto_bill',
+            [AUTO_BILL_OPT_IN, AUTO_BILL_OPT_OUT])->count() > 0;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invoices()
+    {
+        return $this->hasMany('App\Models\Invoice');
     }
 
     /**
@@ -597,7 +572,6 @@ Client::creating(function ($client) {
     $client->setNullValues();
     $client->account->incrementCounter($client);
 });
-
 Client::updating(function ($client) {
     $client->setNullValues();
 });

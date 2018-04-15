@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\LookupInvitation;
 use App\Models\Traits\Inviteable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Utils;
 
 /**
@@ -62,33 +61,29 @@ class Invitation extends EntityModel
 
     public function signatureDiv()
     {
-        if (! $this->signature_base64) {
+        if (!$this->signature_base64) {
             return false;
         }
-
-        return sprintf('<img src="data:image/svg+xml;base64,%s"></img><p/>%s: %s', $this->signature_base64, trans('texts.signed'), Utils::fromSqlDateTime($this->signature_date));
+        return sprintf('<img src="data:image/svg+xml;base64,%s"></img><p/>%s: %s', $this->signature_base64,
+          trans('texts.signed'), Utils::fromSqlDateTime($this->signature_date));
     }
 }
 
-Invitation::creating(function ($invitation)
-{
+Invitation::creating(function ($invitation) {
     LookupInvitation::createNew($invitation->account->account_key, [
-        'invitation_key' => $invitation->invitation_key,
+      'invitation_key' => $invitation->invitation_key,
     ]);
 });
-
 Invitation::updating(function ($invitation) {
     $dirty = $invitation->getDirty();
     if (array_key_exists('message_id', $dirty)) {
         LookupInvitation::updateInvitation($invitation->account->account_key, $invitation);
     }
 });
-
-Invitation::deleted(function ($invitation)
-{
+Invitation::deleted(function ($invitation) {
     if ($invitation->forceDeleting) {
         LookupInvitation::deleteWhere([
-            'invitation_key' => $invitation->invitation_key,
+          'invitation_key' => $invitation->invitation_key,
         ]);
     }
 });

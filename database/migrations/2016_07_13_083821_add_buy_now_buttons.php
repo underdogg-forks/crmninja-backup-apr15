@@ -15,11 +15,9 @@ class AddBuyNowButtons extends Migration
             $table->boolean('enable_buy_now_buttons')->default(false);
             $table->dropColumn('invoice_design');
         });
-
         Schema::table('datetime_formats', function ($table) {
             $table->dropColumn('label');
         });
-
         Schema::table('date_formats', function ($table) {
             $table->dropColumn('label');
         });
@@ -36,11 +34,9 @@ class AddBuyNowButtons extends Migration
             $table->dropColumn('enable_buy_now_buttons');
             $table->text('invoice_design')->nullable();
         });
-
         Schema::table('datetime_formats', function ($table) {
             $table->string('label');
         });
-
         Schema::table('date_formats', function ($table) {
             $table->string('label');
         });

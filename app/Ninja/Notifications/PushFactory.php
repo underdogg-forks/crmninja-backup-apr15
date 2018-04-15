@@ -33,7 +33,6 @@ class PushFactory
     public function customMessage($token, $message, $messageArray, $device)
     {
         $customMessage = PushNotification::Message($message, $messageArray);
-
         $this->message($token, $customMessage, $device);
     }
 
@@ -53,8 +52,8 @@ class PushFactory
     {
         try {
             PushNotification::app($device)
-                ->to($token)
-                ->send($message);
+              ->to($token)
+              ->send($message);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
@@ -68,18 +67,17 @@ class PushFactory
      * We need to run this once ~ 24hrs
      *
      *
-     * @param string $token   - A valid token (can be any valid token)
+     * @param string $token - A valid token (can be any valid token)
      * @param string $message - Nil value for message
-     * @param string $device  - Type of device the message is being pushed to.
+     * @param string $device - Type of device the message is being pushed to.
      *
      * @return array
      */
     public function getFeedback($token, $message, $device)
     {
         $feedback = PushNotification::app($device)
-            ->to($token)
-            ->send($message);
-
+          ->to($token)
+          ->send($message);
         return $feedback->getFeedback();
     }
 }

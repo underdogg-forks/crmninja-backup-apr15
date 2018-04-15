@@ -3,12 +3,17 @@
 namespace App\Ninja\Presenters;
 
 use Laracasts\Presenter\Presenter;
+use stdClass;
 use URL;
 use Utils;
-use stdClass;
 
 class EntityPresenter extends Presenter
 {
+    public function editUrl()
+    {
+        return $this->url() . '/edit';
+    }
+
     /**
      * @return string
      */
@@ -21,20 +26,13 @@ class EntityPresenter extends Presenter
     {
         $type = Utils::pluralizeEntityType($this->entity->getEntityType());
         $id = $this->entity->public_id;
-
         return sprintf('/%s/%s', $type, $id);
-    }
-
-    public function editUrl()
-    {
-        return $this->url() . '/edit';
     }
 
     public function statusLabel($label = false)
     {
         $class = $text = '';
-
-        if (! $this->entity->id) {
+        if (!$this->entity->id) {
             return '';
         } elseif ($this->entity->is_deleted) {
             $class = 'danger';
@@ -46,14 +44,12 @@ class EntityPresenter extends Presenter
             $class = $this->entity->statusClass();
             $label = $label ?: $this->entity->statusLabel();
         }
-
         return "<span style=\"font-size:13px\" class=\"label label-{$class}\">{$label}</span>";
     }
 
     public function statusColor()
     {
         $class = $this->entity->statusClass();
-
         switch ($class) {
             case 'success':
                 return '#5cb85c';
@@ -75,7 +71,6 @@ class EntityPresenter extends Presenter
     {
         $name = $this->entity->getDisplayName();
         $link = $this->url();
-
         return link_to($link, $name)->toHtml();
     }
 
@@ -83,19 +78,16 @@ class EntityPresenter extends Presenter
     {
         $entity = $this->entity;
         $entityType = $entity->getEntityType();
-
         return sprintf('%s: %s', trans('texts.' . $entityType), $entity->getDisplayName());
     }
 
     public function calendarEvent($subColors = false)
     {
         $entity = $this->entity;
-
         $data = new stdClass();
         $data->id = $entity->getEntityType() . ':' . $entity->public_id;
         $data->allDay = true;
         $data->url = $this->url();
-
         return $data;
     }
 

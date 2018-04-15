@@ -12,19 +12,10 @@ class PaymentPresenter extends EntityPresenter
         return Utils::formatMoney($this->entity->amount, $this->entity->client->currency_id);
     }
 
-    public function completedAmount()
-    {
-        return Utils::formatMoney($this->entity->getCompletedAmount(), $this->entity->client->currency_id);
-    }
-
     public function currencySymbol()
     {
-        return Utils::getFromCache($this->entity->client->currency_id ? $this->entity->client->currency_id : DEFAULT_CURRENCY, 'currencies')->symbol;
-    }
-
-    public function client()
-    {
-        return $this->entity->client ? $this->entity->client->getDisplayName() : '';
+        return Utils::getFromCache($this->entity->client->currency_id ? $this->entity->client->currency_id : DEFAULT_CURRENCY,
+          'currencies')->symbol;
     }
 
     public function payment_date()
@@ -51,16 +42,23 @@ class PaymentPresenter extends EntityPresenter
         $data = parent::calendarEvent();
         $payment = $this->entity;
         $invoice = $payment->invoice;
-
         $data->title = trans('texts.payment') . ' ' . $invoice->invoice_number . ' | ' . $this->completedAmount() . ' | ' . $this->client();
         $data->start = $payment->payment_date;
-
         if ($subColors) {
             $data->borderColor = $data->backgroundColor = Utils::brewerColor($payment->payment_status_id);
         } else {
             $data->borderColor = $data->backgroundColor = '#5fa213';
         }
-
         return $data;
+    }
+
+    public function completedAmount()
+    {
+        return Utils::formatMoney($this->entity->getCompletedAmount(), $this->entity->client->currency_id);
+    }
+
+    public function client()
+    {
+        return $this->entity->client ? $this->entity->client->getDisplayName() : '';
     }
 }

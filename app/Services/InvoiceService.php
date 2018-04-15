@@ -3,13 +3,13 @@
 namespace App\Services;
 
 use App\Events\QuoteInvitationWasApproved;
+use App\Jobs\DownloadInvoices;
 use App\Models\Client;
 use App\Models\Invitation;
 use App\Models\Invoice;
 use App\Ninja\Datatables\InvoiceDatatable;
 use App\Ninja\Repositories\ClientRepository;
 use App\Ninja\Repositories\InvoiceRepository;
-use App\Jobs\DownloadInvoices;
 use Auth;
 use Utils;
 
@@ -33,26 +33,18 @@ class InvoiceService extends BaseService
     /**
      * InvoiceService constructor.
      *
-     * @param ClientRepository  $clientRepo
+     * @param ClientRepository $clientRepo
      * @param InvoiceRepository $invoiceRepo
-     * @param DatatableService  $datatableService
+     * @param DatatableService $datatableService
      */
     public function __construct(
-        ClientRepository $clientRepo,
-        InvoiceRepository $invoiceRepo,
-        DatatableService $datatableService
+      ClientRepository $clientRepo,
+      InvoiceRepository $invoiceRepo,
+      DatatableService $datatableService
     ) {
         $this->clientRepo = $clientRepo;
         $this->invoiceRepo = $invoiceRepo;
         $this->datatableService = $datatableService;
-    }
-
-    /**
-     * @return InvoiceRepository
-     */
-    protected function getRepo()
-    {
-        return $this->invoiceRepo;
     }
 
     /**
@@ -73,7 +65,15 @@ class InvoiceService extends BaseService
     }
 
     /**
-     * @param array        $data
+     * @return InvoiceRepository
+     */
+    protected function getRepo()
+    {
+        return $this->invoiceRepo;
+    }
+
+    /**
+     * @param array $data
      * @param Invoice|null $invoice
      *
      * @return \App\Models\Invoice|Invoice|mixed
@@ -98,8 +98,36 @@ class InvoiceService extends BaseService
                 $data['client_id'] = $client->id;
             }
         }
-
         return $this->invoiceRepo->save($data, $invoice);
+    }
+
+    /**
+     * @param $quote
+     * @param Invitation|null $invitation
+     *
+     * @return mixed|null
+     */
+    public function approveQuote($quote, Invitation $invitation = null)
+    {
+        $account = $quote->account;
+        if (!$account->hasFeature(FEATURE_QUOTES) || !$quote->isType(INVOICE_TYPE_QUOTE) || $quote->quote_invoice_id) {
+            return null;
+        }
+        event(new QuoteInvitationWasApproved($quote, $invitation));
+        if ($account->auto_convert_quote) {
+            $invoice = $this->convertQuote($quote);
+            foreach ($invoice->invitations as $invoiceInvitation) {
+                if ($invitation->contact_id == $invoiceInvitation->contact_id) {
+                    $invitation = $invoiceInvitation;
+                }
+            }
+        } else {
+            $quote->markApproved();
+        }
+        if ($account->auto_archive_quote) {
+            $this->invoiceRepo->archive($quote);
+        }
+        return $invitation->invitation_key;
     }
 
     /**
@@ -112,61 +140,22 @@ class InvoiceService extends BaseService
     {
         $account = $quote->account;
         $invoice = $this->invoiceRepo->cloneInvoice($quote, $quote->id);
-
         if ($account->auto_archive_quote) {
             $this->invoiceRepo->archive($quote);
         }
-
         return $invoice;
-    }
-
-    /**
-     * @param $quote
-     * @param Invitation|null $invitation
-     *
-     * @return mixed|null
-     */
-    public function approveQuote($quote, Invitation $invitation = null)
-    {
-        $account = $quote->account;
-
-        if (! $account->hasFeature(FEATURE_QUOTES) || ! $quote->isType(INVOICE_TYPE_QUOTE) || $quote->quote_invoice_id) {
-            return null;
-        }
-
-        event(new QuoteInvitationWasApproved($quote, $invitation));
-
-        if ($account->auto_convert_quote) {
-            $invoice = $this->convertQuote($quote);
-
-            foreach ($invoice->invitations as $invoiceInvitation) {
-                if ($invitation->contact_id == $invoiceInvitation->contact_id) {
-                    $invitation = $invoiceInvitation;
-                }
-            }
-        } else {
-            $quote->markApproved();
-        }
-
-        if ($account->auto_archive_quote) {
-            $this->invoiceRepo->archive($quote);
-        }
-
-        return $invitation->invitation_key;
     }
 
     public function getDatatable($accountId, $clientPublicId, $entityType, $search)
     {
         $datatable = new InvoiceDatatable(true, $clientPublicId);
         $datatable->entityType = $entityType;
-
         $query = $this->invoiceRepo->getInvoices($accountId, $clientPublicId, $entityType, $search)
-                    ->where('invoices.invoice_type_id', '=', $entityType == ENTITY_QUOTE ? INVOICE_TYPE_QUOTE : INVOICE_TYPE_STANDARD);
-
-        if (! Utils::hasPermission('view_all')) {
+          ->where('invoices.invoice_type_id', '=',
+            $entityType == ENTITY_QUOTE ? INVOICE_TYPE_QUOTE : INVOICE_TYPE_STANDARD);
+        if (!Utils::hasPermission('view_all')) {
             $query->where('invoices.user_id', '=', Auth::user()->id);
         }
-
         return $this->datatableService->createDatatable($datatable, $query);
     }
 }

@@ -2,12 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
-use App\Models\Invoice;
-use App\Models\LookupAccount;
-use DB;
-use Exception;
 use App\Libraries\HistoryUtils;
+use DB;
 
 class PurgeClientData extends Job
 {
@@ -25,7 +21,6 @@ class PurgeClientData extends Job
     {
         $invoices = $this->client->invoices()->withTrashed()->get();
         $expenses = $this->client->expenses()->withTrashed()->get();
-
         foreach ($invoices as $invoice) {
             foreach ($invoice->documents as $document) {
                 $document->delete();
@@ -36,9 +31,7 @@ class PurgeClientData extends Job
                 $document->delete();
             }
         }
-
         $this->client->forceDelete();
-
         HistoryUtils::deleteHistory($this->client);
     }
 }

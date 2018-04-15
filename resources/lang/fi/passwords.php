@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Password Reminder Language Lines
@@ -12,11 +10,9 @@ return [
     | has failed, such as for an invalid token or invalid new password.
     |
     */
-
-    'password' => 'Salasanan on oltava vähintään kuusi merkkiä pitkä ja vastattava vahvistuskentän arvoa.',
-    'reset'    => 'Salasana on resetoitu!',
-    'sent'     => 'Resetointilinkki lähetetty sähköpostitse!',
-    'token'    => 'Resetointitunniste on viallinen.',
-    'user'     => 'Sähköpostiosoitteella ei löydy käyttäjää.',
-
+  'password' => 'Salasanan on oltava vähintään kuusi merkkiä pitkä ja vastattava vahvistuskentän arvoa.',
+  'reset' => 'Salasana on resetoitu!',
+  'sent' => 'Resetointilinkki lähetetty sähköpostitse!',
+  'token' => 'Resetointitunniste on viallinen.',
+  'user' => 'Sähköpostiosoitteella ei löydy käyttäjää.',
 ];

@@ -28,9 +28,7 @@ class QueryLogging
             DB::enableQueryLog();
             $timeStart = microtime(true);
         }
-
         $response = $next($request);
-
         if (Utils::isNinjaDev()) {
             // hide requests made by debugbar
             if (strstr($request->url(), '_debugbar') === false) {
@@ -42,7 +40,6 @@ class QueryLogging
                 //Log::info($queries);
             }
         }
-
         return $response;
     }
 }

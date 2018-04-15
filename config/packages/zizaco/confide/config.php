@@ -1,7 +1,5 @@
 <?php
-
 return array(
-
     /*
     |--------------------------------------------------------------------------
     | Login Throttle
@@ -11,10 +9,8 @@ return array(
     | the 'throttle_time_period', which is in minutes.
     |
     */
-
-    'throttle_limit' => 9,
-    'throttle_time_period' => 2,
-
+  'throttle_limit' => 9,
+  'throttle_time_period' => 2,
     /*
     |--------------------------------------------------------------------------
     | Login Throttle Field
@@ -26,8 +22,7 @@ return array(
     | Default: email
     |
     */
-    'login_cache_field' => 'email',
-
+  'login_cache_field' => 'email',
     /*
     |--------------------------------------------------------------------------
     | Form Views
@@ -47,11 +42,10 @@ return array(
     |
     |
     */
-    'login_form' =>             'users.login',
-    'signup_form' =>            'confide::signup',
-    'forgot_password_form' =>   'users.forgot_password',
-    'reset_password_form' =>    'users.reset_password',
-
+  'login_form' => 'users.login',
+  'signup_form' => 'confide::signup',
+  'forgot_password_form' => 'users.forgot_password',
+  'reset_password_form' => 'users.reset_password',
     /*
     |--------------------------------------------------------------------------
     | Email Views
@@ -69,10 +63,8 @@ return array(
     |
     |
     */
-
-    'email_reset_password' =>       'emails.passwordreset_html', // with $user and $token.
-    'email_account_confirmation' => 'emails.confirm_html', // with $user
-
+  'email_reset_password' => 'emails.passwordreset_html', // with $user and $token.
+  'email_account_confirmation' => 'emails.confirm_html', // with $user
     /*
     |--------------------------------------------------------------------------
     | Signup (create) Cache
@@ -87,8 +79,7 @@ return array(
     |
     |
     */
-    'signup_cache' => 0,
-    
+  'signup_cache' => 0,
     /*
     |--------------------------------------------------------------------------
     | Signup E-mail and confirmation (true or false)
@@ -111,7 +102,6 @@ return array(
     | table, otherwise they will not be able to login after the payment.
     |
     */
-    'signup_email'      => false,
-    'signup_confirm'    => false,
-
+  'signup_email' => false,
+  'signup_confirm' => false,
 );

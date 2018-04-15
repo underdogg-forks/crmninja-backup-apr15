@@ -3,7 +3,8 @@
 use App\Models\LookupUser;
 use App\Models\User;
 
-class OAuth {
+class OAuth
+{
 
     const SOCIAL_GOOGLE = 1;
     const SOCIAL_FACEBOOK = 2;
@@ -19,13 +20,11 @@ class OAuth {
 
     public function getProvider($provider)
     {
-        switch ($provider)
-        {
+        switch ($provider) {
             case 'google';
                 $this->providerInstance = new Providers\Google();
                 $this->providerId = self::SOCIAL_GOOGLE;
                 return $this;
-
             default:
                 return null;
                 break;
@@ -35,23 +34,20 @@ class OAuth {
     public function getTokenResponse($token)
     {
         $user = null;
-
         $payload = $this->providerInstance->getTokenResponse($token);
         $oauthUserId = $this->providerInstance->harvestSubField($payload);
-
         LookupUser::setServerByField('oauth_user_key', $this->providerId . '-' . $oauthUserId);
-
-        if($this->providerInstance)
-          $user = User::where('oauth_user_id', $oauthUserId)->where('oauth_provider_id', $this->providerId)->first();
-
-
-        if ($user)
+        if ($this->providerInstance) {
+            $user = User::where('oauth_user_id', $oauthUserId)->where('oauth_provider_id', $this->providerId)->first();
+        }
+        if ($user) {
             return $user;
-        else
+        } else {
             return false;
+        }
 
     }
 
-
 }
+
 ?>

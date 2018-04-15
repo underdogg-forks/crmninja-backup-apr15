@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Event;
-use Illuminate\Http\Request;
 use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
+use Event;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
 
 class ResetPasswordController extends Controller
 {
@@ -20,7 +20,6 @@ class ResetPasswordController extends Controller
     | explore this trait and override any methods you wish to tweak.
     |
     */
-
     use ResetsPasswords {
         sendResetResponse as protected traitSendResetResponse;
     }
@@ -42,10 +41,17 @@ class ResetPasswordController extends Controller
         $this->middleware('guest');
     }
 
+    public function showResetForm(Request $request, $token = null)
+    {
+        return view('auth.passwords.reset')->with([
+          'token' => $token,
+          'url' => '/password/reset'
+        ]);
+    }
+
     protected function sendResetResponse($response)
     {
         $user = auth()->user();
-
         if ($user->google_2fa_secret) {
             auth()->logout();
             session(['2fa:user:id' => $user->id]);
@@ -54,13 +60,5 @@ class ResetPasswordController extends Controller
             Event::fire(new UserLoggedIn());
             return $this->traitSendResetResponse($response);
         }
-    }
-
-    public function showResetForm(Request $request, $token = null)
-    {
-        return view('auth.passwords.reset')->with([
-            'token' => $token,
-            'url' => '/password/reset'
-        ]);
     }
 }

@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Language Lines
@@ -12,8 +10,6 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-
-    'failed'   => 'Ovi podaci ne odgovaraju našima.',
-    'throttle' => 'Previše pokušaja prijave. Molim Vas pokušajte ponovno za :seconds sekundi.',
-
+  'failed' => 'Ovi podaci ne odgovaraju našima.',
+  'throttle' => 'Previše pokušaja prijave. Molim Vas pokušajte ponovno za :seconds sekundi.',
 ];

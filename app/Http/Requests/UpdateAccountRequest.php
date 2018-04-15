@@ -22,8 +22,8 @@ class UpdateAccountRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required',
-            'logo' => 'sometimes|max:'.MAX_LOGO_FILE_SIZE.'|mimes:jpeg,gif,png',
+          'name' => 'required',
+          'logo' => 'sometimes|max:' . MAX_LOGO_FILE_SIZE . '|mimes:jpeg,gif,png',
         ];
     }
 }

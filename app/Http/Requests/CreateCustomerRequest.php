@@ -22,12 +22,11 @@ class CreateCustomerRequest extends CustomerRequest
     public function rules()
     {
         $rules = [
-            'token' => 'required',
-            'client_id' => 'required',
-            'contact_id' => 'required',
-            'payment_method.source_reference' => 'required',
+          'token' => 'required',
+          'client_id' => 'required',
+          'contact_id' => 'required',
+          'payment_method.source_reference' => 'required',
         ];
-
         return $rules;
     }
 }

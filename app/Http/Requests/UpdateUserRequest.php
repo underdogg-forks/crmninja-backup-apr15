@@ -26,9 +26,9 @@ class UpdateUserRequest extends EntityRequest
     public function rules()
     {
         return [
-            'email' => 'email|required|unique:users,email,' . Auth::user()->id . ',id',
-            'first_name' => 'required',
-            'last_name' => 'required',
+          'email' => 'email|required|unique:users,email,' . Auth::user()->id . ',id',
+          'first_name' => 'required',
+          'last_name' => 'required',
         ];
     }
 }

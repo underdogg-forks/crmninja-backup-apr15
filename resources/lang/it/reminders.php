@@ -1,7 +1,5 @@
 <?php
-
 return array(
-
     /*
     |--------------------------------------------------------------------------
     | Password Reminder Language Lines
@@ -12,13 +10,8 @@ return array(
     | has failed, such as for an invalid token or invalid new password.
     |
     */
-
-    "password" => "Le password devono essere di almeno 6 caratteri e devono coincidere.",
-
-    "user"     => "Non esiste un utente associato a questo indirizzo e-mail.",
-
-    "token"    => "Questo token per la reimpostazione della password non è valido.",
-
-    "sent"     => "Promemoria della password inviato!",
-
+  "password" => "Le password devono essere di almeno 6 caratteri e devono coincidere.",
+  "user" => "Non esiste un utente associato a questo indirizzo e-mail.",
+  "token" => "Questo token per la reimpostazione della password non è valido.",
+  "sent" => "Promemoria della password inviato!",
 );

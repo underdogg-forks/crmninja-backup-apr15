@@ -20,10 +20,9 @@ class ClientTransformer extends BaseTransformer
         if ($this->hasClient($data->client_name)) {
             return false;
         }
-
         return new Item($data, function ($data) {
             return [
-                'name' => $this->getString($data, 'client_name'),
+              'name' => $this->getString($data, 'client_name'),
             ];
         });
     }

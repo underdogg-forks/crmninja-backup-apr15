@@ -22,7 +22,7 @@ abstract class Request extends FormRequest
     public function validator($factory)
     {
         return $factory->make(
-            $this->sanitizeInput(), $this->container->call([$this, 'rules']), $this->messages()
+          $this->sanitizeInput(), $this->container->call([$this, 'rules']), $this->messages()
         );
     }
 
@@ -38,7 +38,6 @@ abstract class Request extends FormRequest
         } else {
             $input = $this->all();
         }
-
         // autoload referenced entities
         foreach ($this->autoload as $entityType) {
             if ($id = $this->input("{$entityType}_public_id") ?: $this->input("{$entityType}_id")) {
@@ -48,26 +47,22 @@ abstract class Request extends FormRequest
                 $input[$entityType . '_id'] = $entity->id;
             }
         }
-
         $this->replace($input);
-
         return $this->all();
     }
 
     public function response(array $errors)
     {
         /* If the user is not validating from a mobile app - pass through parent::response */
-        if (! request()->api_secret) {
+        if (!request()->api_secret) {
             return parent::response($errors);
         }
-
         /* If the user is validating from a mobile app - pass through first error string and return error */
         foreach ($errors as $error) {
             foreach ($error as $key => $value) {
                 $message['error'] = ['message' => $value];
                 $message = json_encode($message, JSON_PRETTY_PRINT);
                 $headers = Utils::getApiHeaders();
-
                 return Response::make($message, 400, $headers);
             }
         }

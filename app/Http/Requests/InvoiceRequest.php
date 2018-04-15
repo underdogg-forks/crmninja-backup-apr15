@@ -11,24 +11,20 @@ class InvoiceRequest extends EntityRequest
     public function entity()
     {
         $invoice = parent::entity();
-
         // support loading an invoice by its invoice number
-        if ($this->invoice_number && ! $invoice) {
+        if ($this->invoice_number && !$invoice) {
             $invoice = Invoice::scope()
-                        ->whereInvoiceNumber($this->invoice_number)
-                        ->withTrashed()
-                        ->first();
-
-            if (! $invoice) {
+              ->whereInvoiceNumber($this->invoice_number)
+              ->withTrashed()
+              ->first();
+            if (!$invoice) {
                 abort(404);
             }
         }
-
         // eager load the invoice items
-        if ($invoice && ! $invoice->relationLoaded('invoice_items')) {
+        if ($invoice && !$invoice->relationLoaded('invoice_items')) {
             $invoice->load('invoice_items');
         }
-
         return $invoice;
     }
 }

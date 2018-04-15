@@ -3,8 +3,8 @@
 namespace App\Models\Traits;
 
 use App\Constants\Domain;
-use Utils;
 use HTMLUtils;
+use Utils;
 
 /**
  * Class SendsEmails.
@@ -16,18 +16,17 @@ trait SendsEmails
      *
      * @return mixed
      */
-    public function getDefaultEmailSubject($entityType)
+    public function getEmailSubject($entityType)
     {
-        if (strpos($entityType, 'reminder') !== false) {
-            $entityType = 'reminder';
+        if ($this->hasFeature(FEATURE_CUSTOM_EMAILS)) {
+            $field = "email_subject_{$entityType}";
+            $value = $this->account_email_settings->$field;
+            if ($value) {
+                $value = preg_replace("/\r\n|\r|\n/", ' ', $value);
+                return HTMLUtils::sanitizeHTML($value);
+            }
         }
-
-        return trans("texts.{$entityType}_subject", [
-            'invoice' => '$invoice',
-            'account' => '$account',
-            'quote' => '$quote',
-            'number' => '$number',
-        ]);
+        return $this->getDefaultEmailSubject($entityType);
     }
 
     /**
@@ -35,19 +34,39 @@ trait SendsEmails
      *
      * @return mixed
      */
-    public function getEmailSubject($entityType)
+    public function getDefaultEmailSubject($entityType)
     {
-        if ($this->hasFeature(FEATURE_CUSTOM_EMAILS)) {
-            $field = "email_subject_{$entityType}";
-            $value = $this->account_email_settings->$field;
-
-            if ($value) {
-                $value = preg_replace("/\r\n|\r|\n/", ' ', $value);
-                return HTMLUtils::sanitizeHTML($value);
-            }
+        if (strpos($entityType, 'reminder') !== false) {
+            $entityType = 'reminder';
         }
+        return trans("texts.{$entityType}_subject", [
+          'invoice' => '$invoice',
+          'account' => '$account',
+          'quote' => '$quote',
+          'number' => '$number',
+        ]);
+    }
 
-        return $this->getDefaultEmailSubject($entityType);
+    /**
+     * @param $entityType
+     * @param bool $message
+     *
+     * @return mixed
+     */
+    public function getEmailTemplate($entityType, $message = false)
+    {
+        $template = false;
+        if ($this->hasFeature(FEATURE_CUSTOM_EMAILS)) {
+            $field = "email_template_{$entityType}";
+            $template = $this->account_email_settings->$field;
+        }
+        if (!$template) {
+            $template = $this->getDefaultEmailTemplate($entityType, $message);
+        }
+        $template = preg_replace("/\r\n|\r|\n/", ' ', $template);
+        // <br/> is causing page breaks with the email designs
+        $template = str_replace('/>', ' />', $template);
+        return HTMLUtils::sanitizeHTML($template);
     }
 
     /**
@@ -61,49 +80,18 @@ trait SendsEmails
         if (strpos($entityType, 'reminder') !== false) {
             $entityType = ENTITY_INVOICE;
         }
-
         $template = '<div>$client,</div><br>';
-
         if ($this->hasFeature(FEATURE_CUSTOM_EMAILS) && $this->email_design_id != EMAIL_DESIGN_PLAIN) {
             $template .= '<div>' . trans("texts.{$entityType}_message_button", ['amount' => '$amount']) . '</div><br>' .
-                         '<div style="text-align: center;">$viewButton</div><br>';
+              '<div style="text-align: center;">$viewButton</div><br>';
         } else {
             $template .= '<div>' . trans("texts.{$entityType}_message", ['amount' => '$amount']) . '</div><br>' .
-                         '<div>$viewLink</div><br>';
+              '<div>$viewLink</div><br>';
         }
-
         if ($message) {
             $template .= "$message<p/>";
         }
-
         return $template . '$emailSignature';
-    }
-
-    /**
-     * @param $entityType
-     * @param bool $message
-     *
-     * @return mixed
-     */
-    public function getEmailTemplate($entityType, $message = false)
-    {
-        $template = false;
-
-        if ($this->hasFeature(FEATURE_CUSTOM_EMAILS)) {
-            $field = "email_template_{$entityType}";
-            $template = $this->account_email_settings->$field;
-        }
-
-        if (! $template) {
-            $template = $this->getDefaultEmailTemplate($entityType, $message);
-        }
-
-        $template = preg_replace("/\r\n|\r|\n/", ' ', $template);
-
-        // <br/> is causing page breaks with the email designs
-        $template = str_replace('/>', ' />', $template);
-
-        return HTMLUtils::sanitizeHTML($template);
     }
 
     /**
@@ -130,23 +118,6 @@ trait SendsEmails
     }
 
     /**
-     * @param $reminder
-     *
-     * @return bool
-     */
-    public function getReminderDate($reminder, $filterEnabled = true)
-    {
-        if ($filterEnabled && ! $this->{"enable_reminder{$reminder}"}) {
-            return false;
-        }
-
-        $numDays = $this->{"num_days_reminder{$reminder}"};
-        $plusMinus = $this->{"direction_reminder{$reminder}"} == REMINDER_DIRECTION_AFTER ? '-' : '+';
-
-        return date('Y-m-d', strtotime("$plusMinus $numDays days"));
-    }
-
-    /**
      * @param Invoice $invoice
      *
      * @return bool|string
@@ -157,7 +128,7 @@ trait SendsEmails
             if ($date = $this->getReminderDate($i, $filterEnabled)) {
                 if ($this->{"field_reminder{$i}"} == REMINDER_FIELD_DUE_DATE) {
                     if (($invoice->partial && $invoice->partial_due_date == $date)
-                        || $invoice->due_date == $date) {
+                      || $invoice->due_date == $date) {
                         return "reminder{$i}";
                     }
                 } else {
@@ -167,22 +138,33 @@ trait SendsEmails
                 }
             }
         }
-
         return false;
+    }
+
+    /**
+     * @param $reminder
+     *
+     * @return bool
+     */
+    public function getReminderDate($reminder, $filterEnabled = true)
+    {
+        if ($filterEnabled && !$this->{"enable_reminder{$reminder}"}) {
+            return false;
+        }
+        $numDays = $this->{"num_days_reminder{$reminder}"};
+        $plusMinus = $this->{"direction_reminder{$reminder}"} == REMINDER_DIRECTION_AFTER ? '-' : '+';
+        return date('Y-m-d', strtotime("$plusMinus $numDays days"));
     }
 
     public function setTemplateDefaults($type, $subject, $body)
     {
         $settings = $this->account_email_settings;
-
         if ($subject) {
             $settings->{"email_subject_" . $type} = $subject;
         }
-
         if ($body) {
             $settings->{"email_template_" . $type} = $body;
         }
-
         $settings->save();
     }
 
@@ -198,19 +180,16 @@ trait SendsEmails
 
     public function getFromEmail()
     {
-        if (! $this->isPro() || ! Utils::isNinja() || Utils::isReseller()) {
+        if (!$this->isPro() || !Utils::isNinja() || Utils::isReseller()) {
             return false;
         }
-
         return Domain::getEmailFromId($this->domain_id);
     }
 
     public function getDailyEmailLimit()
     {
         $limit = MAX_EMAILS_SENT_PER_DAY;
-
         $limit += $this->created_at->diffInMonths() * 100;
-
         return min($limit, 1000);
     }
 }

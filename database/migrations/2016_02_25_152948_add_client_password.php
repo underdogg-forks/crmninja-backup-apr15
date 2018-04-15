@@ -15,7 +15,6 @@ class AddClientPassword extends Migration
             $table->boolean('enable_portal_password')->default(0);
             $table->boolean('send_portal_password')->default(0);
         });
-        
         Schema::table('contacts', function ($table) {
             $table->string('password', 255)->nullable();
             $table->boolean('confirmation_code', 255)->nullable();
@@ -34,7 +33,6 @@ class AddClientPassword extends Migration
             $table->dropColumn('enable_portal_password');
             $table->dropColumn('send_portal_password');
         });
-        
         Schema::table('contacts', function ($table) {
             $table->dropColumn('password');
             $table->dropColumn('confirmation_code');

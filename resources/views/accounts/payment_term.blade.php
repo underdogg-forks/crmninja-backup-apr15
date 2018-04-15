@@ -13,35 +13,35 @@
 
 
   <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">{!! $title !!}</h3>
-  </div>
-  <div class="panel-body form-padding-right">
+    <div class="panel-heading">
+      <h3 class="panel-title">{!! $title !!}</h3>
+    </div>
+    <div class="panel-body form-padding-right">
 
-  @if ($paymentTerm)
-    {{ Former::populate($paymentTerm) }}
-  @endif
+      @if ($paymentTerm)
+        {{ Former::populate($paymentTerm) }}
+      @endif
 
-  {!! Former::text('num_days')
-        ->type('number')
-        ->min(1)
-        ->label('texts.num_days') !!}
+      {!! Former::text('num_days')
+            ->type('number')
+            ->min(1)
+            ->label('texts.num_days') !!}
 
-  </div>
+    </div>
   </div>
 
   <center class="buttons">
-      {!! Button::normal(trans('texts.cancel'))->large()->asLinkTo(URL::to('/settings/payment_terms'))->appendIcon(Icon::create('remove-circle')) !!}
-      {!! Button::success(trans('texts.save'))->submit()->large()->appendIcon(Icon::create('floppy-disk')) !!}
+    {!! Button::normal(trans('texts.cancel'))->large()->asLinkTo(URL::to('/settings/payment_terms'))->appendIcon(Icon::create('remove-circle')) !!}
+    {!! Button::success(trans('texts.save'))->submit()->large()->appendIcon(Icon::create('floppy-disk')) !!}
   </center>
 
   {!! Former::close() !!}
 
   <script type="text/javascript">
 
-  $(function() {
-    $('#name').focus();
-  });
+      $(function () {
+          $('#name').focus();
+      });
 
   </script>
 

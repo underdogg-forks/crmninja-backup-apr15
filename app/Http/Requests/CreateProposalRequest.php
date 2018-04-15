@@ -22,7 +22,7 @@ class CreateProposalRequest extends ProposalRequest
     public function rules()
     {
         return [
-            'invoice_id' => 'required',
+          'invoice_id' => 'required',
         ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Client;
 use App\Ninja\Datatables\ProposalDatatable;
 use App\Ninja\Repositories\ProposalRepository;
 
@@ -25,20 +24,12 @@ class ProposalService extends BaseService
      * CreditService constructor.
      *
      * @param ProposalRepository $creditRepo
-     * @param DatatableService  $datatableService
+     * @param DatatableService $datatableService
      */
     public function __construct(ProposalRepository $proposalRepo, DatatableService $datatableService)
     {
         $this->proposalRepo = $proposalRepo;
         $this->datatableService = $datatableService;
-    }
-
-    /**
-     * @return CreditRepository
-     */
-    protected function getRepo()
-    {
-        return $this->proposalRepo;
     }
 
     /**
@@ -63,9 +54,15 @@ class ProposalService extends BaseService
     {
         // we don't support bulk edit and hide the client on the individual client page
         $datatable = new ProposalDatatable();
-
         $query = $this->proposalRepo->find($search, $userId);
-
         return $this->datatableService->createDatatable($datatable, $query);
+    }
+
+    /**
+     * @return CreditRepository
+     */
+    protected function getRepo()
+    {
+        return $this->proposalRepo;
     }
 }

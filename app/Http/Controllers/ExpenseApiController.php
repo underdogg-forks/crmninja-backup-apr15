@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ExpenseRequest;
 use App\Http\Requests\CreateExpenseRequest;
+use App\Http\Requests\ExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\Expense;
 use App\Ninja\Repositories\ExpenseRepository;
@@ -20,7 +20,6 @@ class ExpenseApiController extends BaseAPIController
     public function __construct(ExpenseRepository $expenseRepo, ExpenseService $expenseService)
     {
         parent::__construct();
-
         $this->expenseRepo = $expenseRepo;
         $this->expenseService = $expenseService;
     }
@@ -45,10 +44,9 @@ class ExpenseApiController extends BaseAPIController
     public function index()
     {
         $expenses = Expense::scope()
-            ->withTrashed()
-            ->with('client', 'invoice', 'vendor', 'expense_category')
-            ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->with('client', 'invoice', 'vendor', 'expense_category')
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($expenses);
     }
 
@@ -105,11 +103,9 @@ class ExpenseApiController extends BaseAPIController
     public function store(CreateExpenseRequest $request)
     {
         $expense = $this->expenseService->save($request->input());
-
         $expense = Expense::scope($expense->public_id)
-            ->with('client', 'invoice', 'vendor')
-            ->first();
-
+          ->with('client', 'invoice', 'vendor')
+          ->first();
         return $this->itemResponse($expense);
     }
 
@@ -148,11 +144,9 @@ class ExpenseApiController extends BaseAPIController
         if ($request->action) {
             return $this->handleAction($request);
         }
-
         $data = $request->input();
         $data['public_id'] = $publicId;
         $expense = $this->expenseService->save($data, $request->entity());
-
         return $this->itemResponse($expense);
     }
 
@@ -182,9 +176,7 @@ class ExpenseApiController extends BaseAPIController
     public function destroy(UpdateExpenseRequest $request)
     {
         $expense = $request->entity();
-
         $this->expenseRepo->delete($expense);
-
         return $this->itemResponse($expense);
     }
 }

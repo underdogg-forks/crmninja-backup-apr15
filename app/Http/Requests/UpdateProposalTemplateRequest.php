@@ -21,12 +21,12 @@ class UpdateProposalTemplateRequest extends ProposalTemplateRequest
      */
     public function rules()
     {
-        if (! $this->entity()) {
+        if (!$this->entity()) {
             return [];
         }
-
         return [
-            'name' => sprintf('required|unique:proposal_templates,name,%s,id,account_id,%s', $this->entity()->id, $this->user()->account_id),
+          'name' => sprintf('required|unique:proposal_templates,name,%s,id,account_id,%s', $this->entity()->id,
+            $this->user()->account_id),
         ];
     }
 }

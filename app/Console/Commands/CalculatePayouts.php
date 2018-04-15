@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Libraries\CurlUtils;
+use App\Models\Company;
 use App\Models\DbServer;
 use App\Models\User;
-use App\Models\Company;
-use App\Libraries\CurlUtils;
+use Illuminate\Console\Command;
 
 class CalculatePayouts extends Command
 {
@@ -23,7 +23,6 @@ class CalculatePayouts extends Command
      * @var string
      */
     protected $description = 'Calculate payouts';
-
 
     /**
      * Create a new command instance.
@@ -44,7 +43,6 @@ class CalculatePayouts extends Command
     {
         $this->info('Running CalculatePayouts...');
         $type = strtolower($this->option('type'));
-
         switch ($type) {
             case 'referral':
                 $this->referralPayouts();
@@ -59,34 +57,27 @@ class CalculatePayouts extends Command
     {
         $servers = DbServer::orderBy('id')->get(['name']);
         $userMap = [];
-
         foreach ($servers as $server) {
             $this->info('Processing users: ' . $server->name);
             config(['database.default' => $server->name]);
-
             $users = User::where('referral_code', '!=', '')
-                ->get(['email', 'referral_code']);
+              ->get(['email', 'referral_code']);
             foreach ($users as $user) {
                 $userMap[$user->referral_code] = $user->email;
             }
         }
-
         foreach ($servers as $server) {
             $this->info('Processing companies: ' . $server->name);
             config(['database.default' => $server->name]);
-
             $companies = Company::where('referral_code', '!=', '')
-                ->with('payment.client.payments')
-                ->whereNotNull('payment_id')
-                ->get();
-
+              ->with('payment.client.payments')
+              ->whereNotNull('payment_id')
+              ->get();
             foreach ($companies as $company) {
                 $user = $userMap[$company->referral_code];
                 $payment = $company->payment;
                 $client = $payment->client;
-
                 $this->info("User: $user");
-
                 foreach ($client->payments as $payment) {
                     $amount = $payment->getCompletedAmount();
                     $this->info("Date: $payment->payment_date, Amount: $amount, Reference: $payment->transaction_reference");
@@ -98,9 +89,8 @@ class CalculatePayouts extends Command
     private function resellerPayouts()
     {
         $response = CurlUtils::post($this->option('url') . '/reseller_stats', [
-            'password' => $this->option('password')
+          'password' => $this->option('password')
         ]);
-
         $this->info('Response:');
         $this->info($response);
     }
@@ -108,9 +98,9 @@ class CalculatePayouts extends Command
     protected function getOptions()
     {
         return [
-            ['type', null, InputOption::VALUE_OPTIONAL, 'Type', null],
-            ['url', null, InputOption::VALUE_OPTIONAL, 'Url', null],
-            ['password', null, InputOption::VALUE_OPTIONAL, 'Password', null],
+          ['type', null, InputOption::VALUE_OPTIONAL, 'Type', null],
+          ['url', null, InputOption::VALUE_OPTIONAL, 'Url', null],
+          ['password', null, InputOption::VALUE_OPTIONAL, 'Password', null],
         ];
     }
 

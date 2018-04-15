@@ -18,8 +18,8 @@ class AccountTokenTransformer extends TransformerAbstract
     public function transform(AccountToken $account_token)
     {
         return [
-            'name' => $account_token->name,
-            'token' => $account_token->token,
+          'name' => $account_token->name,
+          'token' => $account_token->token,
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Ninja\Repositories\AccountRepository;
 use App\Services\AuthService;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -23,7 +23,7 @@ class AuthController extends Controller
      * Create a new authentication controller instance.
      *
      * @param AccountRepository $repo
-     * @param AuthService       $authService
+     * @param AuthService $authService
      *
      * @internal param \Illuminate\Contracts\Auth\Guard $auth
      * @internal param \Illuminate\Contracts\Auth\Registrar $registrar
@@ -51,9 +51,7 @@ class AuthController extends Controller
     public function oauthUnlink()
     {
         $this->accountRepo->unlinkUserFromOauth(auth()->user());
-
         session()->flash('message', trans('texts.updated_settings'));
-
         return redirect()->to('/settings/' . ACCOUNT_USER_DETAILS);
     }
 }

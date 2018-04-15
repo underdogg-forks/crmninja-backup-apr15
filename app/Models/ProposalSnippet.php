@@ -22,12 +22,12 @@ class ProposalSnippet extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'name',
-        'icon',
-        'private_notes',
-        'proposal_category_id',
-        'html',
-        'css',
+      'name',
+      'icon',
+      'private_notes',
+      'proposal_category_id',
+      'html',
+      'css',
     ];
 
     /**

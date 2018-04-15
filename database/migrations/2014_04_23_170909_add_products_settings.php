@@ -15,7 +15,6 @@ class AddProductsSettings extends Migration
             $table->boolean('fill_products')->default(true);
             $table->boolean('update_products')->default(true);
         });
-
         DB::table('accounts')->update(['fill_products' => true]);
         DB::table('accounts')->update(['update_products' => true]);
     }

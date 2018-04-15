@@ -1,38 +1,38 @@
 @extends('header')
 
-@section('content') 
-    @parent
+@section('content')
+  @parent
 
-    @include('accounts.nav', ['selected' => ACCOUNT_SYSTEM_SETTINGS])
+  @include('accounts.nav', ['selected' => ACCOUNT_SYSTEM_SETTINGS])
 
-    <div class="row">
-        <div class="col-md-12">
-            {!! Former::open('/update_setup')
-                ->addClass('warn-on-exit')
-                ->autocomplete('off')
-                ->rules([
-                    'app[url]' => 'required',
-                    //'database[default]' => 'required',
-                    'database[type][host]' => 'required',
-                    'database[type][database]' => 'required',
-                    'database[type][username]' => 'required',
-                    'database[type][password]' => 'required',
-                ]) !!}
+  <div class="row">
+    <div class="col-md-12">
+      {!! Former::open('/update_setup')
+          ->addClass('warn-on-exit')
+          ->autocomplete('off')
+          ->rules([
+              'app[url]' => 'required',
+              //'database[default]' => 'required',
+              'database[type][host]' => 'required',
+              'database[type][database]' => 'required',
+              'database[type][username]' => 'required',
+              'database[type][password]' => 'required',
+          ]) !!}
 
 
-            @include('partials.system_settings')
+      @include('partials.system_settings')
 
-        </div>
     </div>
+  </div>
 
-    <center>
-        {!! Button::success(trans('texts.save'))->submit()->large()->appendIcon(Icon::create('floppy-disk')) !!}
-    </center>
+  <center>
+    {!! Button::success(trans('texts.save'))->submit()->large()->appendIcon(Icon::create('floppy-disk')) !!}
+  </center>
 
-    {!! Former::close() !!}
+  {!! Former::close() !!}
 
 @stop
 
 @section('onReady')
-    $('#app\\[url\\]').focus();
+  $('#app\\[url\\]').focus();
 @stop

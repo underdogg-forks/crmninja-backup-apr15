@@ -22,9 +22,9 @@ class UpdateContactRequest extends ContactRequest
     public function rules()
     {
         return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
+          'first_name' => 'required',
+          'last_name' => 'required',
+          'email' => 'required',
         ];
     }
 }

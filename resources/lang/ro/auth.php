@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Language Lines
@@ -12,8 +10,6 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-
-    'failed'   => 'Datele de identificare nu pot fi confirmate.',
-    'throttle' => 'Prea multe încercări de intrare în cont. Poți încerca din nou peste :seconds secunde.',
-
+  'failed' => 'Datele de identificare nu pot fi confirmate.',
+  'throttle' => 'Prea multe încercări de intrare în cont. Poți încerca din nou peste :seconds secunde.',
 ];

@@ -26,7 +26,7 @@ class InvoiceInvitationWasViewed extends Event
     /**
      * Create a new event instance.
      *
-     * @param Invoice    $invoice
+     * @param Invoice $invoice
      * @param Invitation $invitation
      */
     public function __construct(Invoice $invoice, Invitation $invitation)

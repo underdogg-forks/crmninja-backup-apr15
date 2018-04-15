@@ -26,24 +26,15 @@ class Proposal extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'private_notes',
-        'html',
-        'css',
+      'private_notes',
+      'html',
+      'css',
     ];
 
     /**
      * @var string
      */
     //protected $presenter = 'App\Ninja\Presenters\ProjectPresenter';
-
-    /**
-     * @return mixed
-     */
-    public function getEntityType()
-    {
-        return ENTITY_PROPOSAL;
-    }
-
     /**
      * @return string
      */
@@ -97,23 +88,29 @@ class Proposal extends EntityModel
         return $this->invoice->invoice_number;
     }
 
-    public function getLink($forceOnsite = false, $forcePlain = false)
-    {
-        $invitation = $this->invitations->first();
-
-        return $invitation->getLink('proposal', $forceOnsite, $forcePlain);
-    }
-
     public function getHeadlessLink()
     {
         return sprintf('%s?phantomjs=true&phantomjs_secret=%s', $this->getLink(true, true), env('PHANTOMJS_SECRET'));
     }
 
+    public function getLink($forceOnsite = false, $forcePlain = false)
+    {
+        $invitation = $this->invitations->first();
+        return $invitation->getLink('proposal', $forceOnsite, $forcePlain);
+    }
+
     public function getFilename($extension = 'pdf')
     {
         $entityType = $this->getEntityType();
-
         return trans('texts.proposal') . '_' . $this->invoice->invoice_number . '.' . $extension;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntityType()
+    {
+        return ENTITY_PROPOSAL;
     }
 
     /**
@@ -133,7 +130,6 @@ class Proposal extends EntityModel
 Proposal::creating(function ($project) {
     $project->setNullValues();
 });
-
 Proposal::updating(function ($project) {
     $project->setNullValues();
 });

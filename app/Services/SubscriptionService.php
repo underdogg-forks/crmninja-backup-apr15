@@ -23,21 +23,13 @@ class SubscriptionService extends BaseService
     /**
      * SubscriptionService constructor.
      *
-     * @param SubscriptionRepository  $subscriptionRepo
+     * @param SubscriptionRepository $subscriptionRepo
      * @param DatatableService $datatableService
      */
     public function __construct(SubscriptionRepository $subscriptionRepo, DatatableService $datatableService)
     {
         $this->subscriptionRepo = $subscriptionRepo;
         $this->datatableService = $datatableService;
-    }
-
-    /**
-     * @return SubscriptionRepository
-     */
-    protected function getRepo()
-    {
-        return $this->subscriptionRepo;
     }
 
     /**
@@ -49,7 +41,14 @@ class SubscriptionService extends BaseService
     {
         $datatable = new SubscriptionDatatable(false);
         $query = $this->subscriptionRepo->find($accountId);
-
         return $this->datatableService->createDatatable($datatable, $query);
+    }
+
+    /**
+     * @return SubscriptionRepository
+     */
+    protected function getRepo()
+    {
+        return $this->subscriptionRepo;
     }
 }

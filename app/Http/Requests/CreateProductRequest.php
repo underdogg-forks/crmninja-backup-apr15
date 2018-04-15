@@ -22,7 +22,7 @@ class CreateProductRequest extends ProductRequest
     public function rules()
     {
         return [
-            'product_key' => 'required',
+          'product_key' => 'required',
         ];
     }
 }

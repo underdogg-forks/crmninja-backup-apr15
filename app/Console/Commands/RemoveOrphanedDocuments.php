@@ -23,21 +23,17 @@ class RemoveOrphanedDocuments extends Command
 
     public function fire()
     {
-        $this->info(date('r').' Running RemoveOrphanedDocuments...');
-
+        $this->info(date('r') . ' Running RemoveOrphanedDocuments...');
         if ($database = $this->option('database')) {
             config(['database.default' => $database]);
         }
-
-        $documents = Document::whereRaw('invoice_id IS NULL AND expense_id IS NULL AND updated_at <= ?', [new DateTime('-1 hour')])
-            ->get();
-
+        $documents = Document::whereRaw('invoice_id IS NULL AND expense_id IS NULL AND updated_at <= ?',
+          [new DateTime('-1 hour')])
+          ->get();
         $this->info($documents->count() . ' orphaned document(s) found');
-
         foreach ($documents as $document) {
             $document->delete();
         }
-
         $this->info('Done');
     }
 
@@ -55,7 +51,7 @@ class RemoveOrphanedDocuments extends Command
     protected function getOptions()
     {
         return [
-            ['database', null, InputOption::VALUE_OPTIONAL, 'Database', null],
+          ['database', null, InputOption::VALUE_OPTIONAL, 'Database', null],
         ];
     }
 }

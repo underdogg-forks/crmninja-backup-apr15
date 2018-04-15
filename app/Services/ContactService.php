@@ -26,14 +26,6 @@ class ContactService extends BaseService
     }
 
     /**
-     * @return ContactRepository
-     */
-    protected function getRepo()
-    {
-        return $this->contactRepo;
-    }
-
-    /**
      * @param $data
      * @param null $contact
      *
@@ -44,8 +36,15 @@ class ContactService extends BaseService
         if (isset($data['client_id']) && $data['client_id']) {
             $data['client_id'] = Client::getPrivateId($data['client_id']);
         }
-
         return $this->contactRepo->save($data, $contact);
+    }
+
+    /**
+     * @return ContactRepository
+     */
+    protected function getRepo()
+    {
+        return $this->contactRepo;
     }
 
 }

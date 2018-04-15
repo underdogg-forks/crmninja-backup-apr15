@@ -9,9 +9,7 @@ class FindQuoteIntent extends InvoiceIntent
     public function process()
     {
         $invoice = $this->requestInvoice();
-
         $url = $invoice ? $invoice->present()->url : '/quotes';
-
         return redirect($url);
     }
 }

@@ -17,8 +17,8 @@
       ->fromQuery($taxRates, null, 'public_id') !!}
 
   <div style="display:none">
-      {!! Former::input('tax_rate2') !!}
-      {!! Former::input('tax_name2') !!}
+    {!! Former::input('tax_rate2') !!}
+    {!! Former::input('tax_name2') !!}
   </div>
 </div>
 
@@ -31,7 +31,7 @@
         var tax = $select.find('option:selected').text();
 
         var index = tax.lastIndexOf(': ');
-        var taxName =  tax.substring(0, index);
+        var taxName = tax.substring(0, index);
         var taxRate = tax.substring(index + 2, tax.length - 1);
 
         var selectName = $select.attr('name');
@@ -48,7 +48,7 @@
         if (!taxRate || !taxName) {
             return;
         }
-        var tax = _.findWhere(taxRates, {name:taxName, rate:taxRate});
+        var tax = _.findWhere(taxRates, {name: taxName, rate: taxRate});
         if (tax) {
             $select.val(tax.public_id);
         } else {
@@ -58,7 +58,7 @@
         }
     }
 
-    $(function() {
+    $(function () {
         setTaxSelect(1);
         setTaxSelect(2);
     });

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Ninja\Repositories\UserRepository;
 use App\Ninja\Transformers\UserTransformer;
@@ -21,7 +21,6 @@ class UserApiController extends BaseAPIController
     public function __construct(UserService $userService, UserRepository $userRepo)
     {
         parent::__construct();
-
         $this->userService = $userService;
         $this->userRepo = $userRepo;
     }
@@ -46,9 +45,8 @@ class UserApiController extends BaseAPIController
     public function index()
     {
         $users = User::whereAccountId(Auth::user()->account_id)
-                        ->withTrashed()
-                        ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($users);
     }
 
@@ -107,6 +105,14 @@ class UserApiController extends BaseAPIController
         return $this->save($request);
     }
 
+    private function save($request, $user = false)
+    {
+        $user = $this->userRepo->save($request->input(), $user);
+        $transformer = new UserTransformer(\Auth::user()->account, $request->serializer);
+        $data = $this->createItem($user, $transformer, 'users');
+        return $this->response($data);
+    }
+
     /**
      * @SWG\Put(
      *   path="/users/{user_id}",
@@ -140,27 +146,14 @@ class UserApiController extends BaseAPIController
     public function update(UpdateUserRequest $request, $userPublicId)
     {
         $user = Auth::user();
-
         if ($request->action == ACTION_ARCHIVE) {
             $this->userRepo->archive($user);
-
             $transformer = new UserTransformer(Auth::user()->account, $request->serializer);
             $data = $this->createItem($user, $transformer, 'users');
-
             return $this->response($data);
         } else {
             return $this->save($request, $user);
         }
-    }
-
-    private function save($request, $user = false)
-    {
-        $user = $this->userRepo->save($request->input(), $user);
-
-        $transformer = new UserTransformer(\Auth::user()->account, $request->serializer);
-        $data = $this->createItem($user, $transformer, 'users');
-
-        return $this->response($data);
     }
 
     /**
@@ -189,9 +182,7 @@ class UserApiController extends BaseAPIController
     public function destroy(UpdateUserRequest $request)
     {
         $entity = $request->entity();
-
         $this->userRepo->delete($entity);
-
         return $this->itemResponse($entity);
     }
 }

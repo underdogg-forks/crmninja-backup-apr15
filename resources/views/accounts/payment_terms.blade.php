@@ -25,7 +25,7 @@
       ->render('datatable') !!}
 
   <script>
-    window.onDatatableReady = actionListHandler;
+      window.onDatatableReady = actionListHandler;
   </script>
 
 

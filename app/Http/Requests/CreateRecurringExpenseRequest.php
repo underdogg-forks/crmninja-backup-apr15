@@ -22,7 +22,7 @@ class CreateRecurringExpenseRequest extends RecurringExpenseRequest
     public function rules()
     {
         return [
-            'amount' => 'numeric',
+          'amount' => 'numeric',
         ];
     }
 }

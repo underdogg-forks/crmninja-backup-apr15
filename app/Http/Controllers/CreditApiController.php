@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreditRequest;
 use App\Http\Requests\CreateCreditRequest;
+use App\Http\Requests\CreditRequest;
 use App\Http\Requests\UpdateCreditRequest;
-use App\Models\Invoice;
 use App\Models\Credit;
 use App\Ninja\Repositories\CreditRepository;
 use Input;
@@ -20,7 +19,6 @@ class CreditApiController extends BaseAPIController
     public function __construct(CreditRepository $creditRepo)
     {
         parent::__construct();
-
         $this->creditRepo = $creditRepo;
     }
 
@@ -44,10 +42,9 @@ class CreditApiController extends BaseAPIController
     public function index()
     {
         $credits = Credit::scope()
-                        ->withTrashed()
-                        ->with(['client'])
-                        ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->with(['client'])
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($credits);
     }
 
@@ -104,7 +101,6 @@ class CreditApiController extends BaseAPIController
     public function store(CreateCreditRequest $request)
     {
         $credit = $this->creditRepo->save($request->input());
-
         return $this->itemResponse($credit);
     }
 
@@ -143,11 +139,9 @@ class CreditApiController extends BaseAPIController
         if ($request->action) {
             return $this->handleAction($request);
         }
-
         $data = $request->input();
         $data['public_id'] = $publicId;
         $credit = $this->creditRepo->save($data, $request->entity());
-
         return $this->itemResponse($credit);
     }
 
@@ -177,9 +171,7 @@ class CreditApiController extends BaseAPIController
     public function destroy(UpdateCreditRequest $request)
     {
         $credit = $request->entity();
-
         $this->creditRepo->delete($credit);
-
         return $this->itemResponse($credit);
     }
 }

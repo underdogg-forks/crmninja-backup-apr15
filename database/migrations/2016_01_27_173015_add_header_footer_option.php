@@ -17,19 +17,16 @@ class AddHeaderFooterOption extends Migration
             $table->boolean('show_currency_code');
             $table->date('pro_plan_trial')->nullable();
         });
-
         Schema::table('gateways', function ($table) {
             $table->boolean('is_offsite');
             $table->boolean('is_secure');
         });
-
         Schema::table('expenses', function ($table) {
             if (Schema::hasColumn('expenses', 'transaction_id')) {
                 $table->string('transaction_id')->nullable()->change();
                 $table->unsignedInteger('bank_id')->nullable()->change();
             }
         });
-
         Schema::table('vendors', function ($table) {
             if (Schema::hasColumn('vendors', 'transaction_name')) {
                 $table->string('transaction_name')->nullable()->change();
@@ -50,7 +47,6 @@ class AddHeaderFooterOption extends Migration
             $table->dropColumn('show_currency_code');
             $table->dropColumn('pro_plan_trial');
         });
-
         Schema::table('gateways', function ($table) {
             $table->dropColumn('is_offsite');
             $table->dropColumn('is_secure');

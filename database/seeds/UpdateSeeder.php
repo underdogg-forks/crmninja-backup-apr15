@@ -10,7 +10,6 @@ class UpdateSeeder extends Seeder
     public function run()
     {
         $this->command->info('Running UpdateSeeder...');
-
         $this->call('CountriesSeeder');
         $this->call('PaymentLibrariesSeeder');
         $this->call('FontsSeeder');
@@ -28,7 +27,6 @@ class UpdateSeeder extends Seeder
         $this->call('IndustrySeeder');
         $this->call('FrequencySeeder');
         $this->call('DbServerSeeder');
-
         Cache::flush();
     }
 }

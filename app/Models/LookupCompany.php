@@ -13,8 +13,8 @@ class LookupCompany extends LookupModel
      * @var array
      */
     protected $fillable = [
-        'db_server_id',
-        'company_id',
+      'db_server_id',
+      'company_id',
     ];
 
     public function dbServer()

@@ -17,25 +17,21 @@ use View;
  * Class ProjectApiController
  * @package App\Http\Controllers
  */
-
 class ProjectApiController extends BaseAPIController
 {
     /**
      * @var ProjectRepository
      */
-
     protected $projectRepo;
 
     /**
      * @var ProjectService
      */
-
     protected $projectService;
 
     /**
      * @var string
      */
-
     protected $entityType = ENTITY_PROJECT;
 
     /**
@@ -43,11 +39,9 @@ class ProjectApiController extends BaseAPIController
      * @param ProjectRepository $projectRepo
      * @param ProjectService $projectService
      */
-
     public function __construct(ProjectRepository $projectRepo, ProjectService $projectService)
     {
         parent::__construct();
-
         $this->projectRepo = $projectRepo;
         $this->projectService = $projectService;
     }
@@ -69,16 +63,13 @@ class ProjectApiController extends BaseAPIController
      *   )
      * )
      */
-
     public function index()
     {
         $projects = Project::scope()
-            ->withTrashed()
-            ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($projects);
     }
-
 
     /**
      * @SWG\Get(
@@ -103,7 +94,6 @@ class ProjectApiController extends BaseAPIController
      *   )
      * )
      */
-
     public function show(ProjectRequest $request)
     {
         return $this->itemResponse($request->entity());
@@ -131,14 +121,11 @@ class ProjectApiController extends BaseAPIController
      *   )
      * )
      */
-
     public function store(CreateProjectRequest $request)
     {
         $project = $this->projectService->save($request->input());
-
         return $this->itemResponse($project);
     }
-
 
     /**
      * @SWG\Put(
@@ -170,20 +157,16 @@ class ProjectApiController extends BaseAPIController
      *
      * @param mixed $publicId
      */
-
     public function update(UpdateProjectRequest $request, $publicId)
     {
         if ($request->action) {
             return $this->handleAction($request);
         }
-
         $data = $request->input();
         $data['public_id'] = $publicId;
         $project = $this->projectService->save($request->input(), $request->entity());
-
         return $this->itemResponse($project);
     }
-
 
     /**
      * @SWG\Delete(
@@ -209,15 +192,11 @@ class ProjectApiController extends BaseAPIController
      * )
      *
      */
-
-     public function destroy(UpdateProjectRequest $request)
-     {
-         $project = $request->entity();
-
-         $this->projectRepo->delete($project);
-
-         return $this->itemResponse($project);
-     }
-
+    public function destroy(UpdateProjectRequest $request)
+    {
+        $project = $request->entity();
+        $this->projectRepo->delete($project);
+        return $this->itemResponse($project);
+    }
 
 }

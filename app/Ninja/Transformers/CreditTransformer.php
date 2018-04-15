@@ -16,7 +16,6 @@ class CreditTransformer extends EntityTransformer
      * @SWG\Property(property="private_notes", type="string", example="Notes...")
      * @SWG\Property(property="public_notes", type="string", example="Notes...")
      */
-
     /**
      * @param Credit $credit
      *
@@ -25,17 +24,17 @@ class CreditTransformer extends EntityTransformer
     public function transform(Credit $credit)
     {
         return array_merge($this->getDefaults($credit), [
-            'id' => (int) $credit->public_id,
-            'amount' => (float) $credit->amount,
-            'balance' => (float) $credit->balance,
-            'updated_at' => $this->getTimestamp($credit->updated_at),
-            'archived_at' => $this->getTimestamp($credit->deleted_at),
-            'is_deleted' => (bool) $credit->is_deleted,
-            'credit_date' => $credit->credit_date,
-            'credit_number' => $credit->credit_number,
-            'private_notes' => $credit->private_notes,
-            'public_notes' => $credit->public_notes,
-            'client_id' => $credit->client->public_id,
+          'id' => (int)$credit->public_id,
+          'amount' => (float)$credit->amount,
+          'balance' => (float)$credit->balance,
+          'updated_at' => $this->getTimestamp($credit->updated_at),
+          'archived_at' => $this->getTimestamp($credit->deleted_at),
+          'is_deleted' => (bool)$credit->is_deleted,
+          'credit_date' => $credit->credit_date,
+          'credit_number' => $credit->credit_number,
+          'private_notes' => $credit->private_notes,
+          'public_notes' => $credit->public_notes,
+          'client_id' => $credit->client->public_id,
         ]);
     }
 }

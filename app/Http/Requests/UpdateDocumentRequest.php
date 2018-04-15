@@ -22,7 +22,6 @@ class UpdateDocumentRequest extends DocumentRequest
     public function rules()
     {
         return [
-
         ];
     }
 }

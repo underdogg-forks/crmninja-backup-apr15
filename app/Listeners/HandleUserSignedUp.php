@@ -27,7 +27,7 @@ class HandleUserSignedUp
      * Create the event handler.
      *
      * @param AccountRepository $accountRepo
-     * @param UserMailer        $userMailer
+     * @param UserMailer $userMailer
      */
     public function __construct(AccountRepository $accountRepo, UserMailer $userMailer)
     {
@@ -45,15 +45,13 @@ class HandleUserSignedUp
     public function handle(UserSignedUp $event)
     {
         $user = Auth::user();
-
-        if (Utils::isNinjaProd() && ! $user->confirmed) {
+        if (Utils::isNinjaProd() && !$user->confirmed) {
             $this->userMailer->sendConfirmation($user);
         } elseif (Utils::isNinjaDev()) {
             // do nothing
         } else {
             $this->accountRepo->registerNinjaUser($user);
         }
-
         session([SESSION_COUNTER => -1]);
         session([SESSION_DB_SERVER => config('database.default')]);
     }

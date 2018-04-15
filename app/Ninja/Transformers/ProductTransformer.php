@@ -21,19 +21,19 @@ class ProductTransformer extends EntityTransformer
     public function transform(Product $product)
     {
         return array_merge($this->getDefaults($product), [
-            'id' => (int) $product->public_id,
-            'product_key' => $product->product_key,
-            'notes' => $product->notes,
-            'cost' => $product->cost,
-            'qty' => $product->qty,
-            'tax_name1' => $product->tax_name1 ?: '',
-            'tax_rate1' => (float) $product->tax_rate1,
-            'tax_name2' => $product->tax_name2 ?: '',
-            'tax_rate2' => (float) $product->tax_rate2,
-            'updated_at' => $this->getTimestamp($product->updated_at),
-            'archived_at' => $this->getTimestamp($product->deleted_at),
-            'custom_value1' => $product->custom_value1,
-            'custom_value2' => $product->custom_value2,
+          'id' => (int)$product->public_id,
+          'product_key' => $product->product_key,
+          'notes' => $product->notes,
+          'cost' => $product->cost,
+          'qty' => $product->qty,
+          'tax_name1' => $product->tax_name1 ?: '',
+          'tax_rate1' => (float)$product->tax_rate1,
+          'tax_name2' => $product->tax_name2 ?: '',
+          'tax_rate2' => (float)$product->tax_rate2,
+          'updated_at' => $this->getTimestamp($product->updated_at),
+          'archived_at' => $this->getTimestamp($product->deleted_at),
+          'custom_value1' => $product->custom_value1,
+          'custom_value2' => $product->custom_value2,
         ]);
     }
 }

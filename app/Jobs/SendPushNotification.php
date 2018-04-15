@@ -32,9 +32,8 @@ class SendPushNotification extends Job implements ShouldQueue
 
     /**
      * Create a new job instance.
-
      * @param Invoice $invoice
-     * @param mixed   $type
+     * @param mixed $type
      */
     public function __construct($invoice, $type)
     {
@@ -53,7 +52,6 @@ class SendPushNotification extends Job implements ShouldQueue
         if (config('queue.default') !== 'sync') {
             $this->invoice->account->loadLocalizationSettings();
         }
-
         $pushService->sendNotification($this->invoice, $this->type);
     }
 }

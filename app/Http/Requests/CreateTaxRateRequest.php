@@ -24,8 +24,8 @@ class CreateTaxRateRequest extends TaxRateRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'rate' => 'required',
+          'name' => 'required',
+          'rate' => 'required',
         ];
     }
 }

@@ -7,23 +7,20 @@ class PaymentStatusSeeder extends Seeder
     public function run()
     {
         Eloquent::unguard();
-
         $this->createPaymentStatuses();
-
         Eloquent::reguard();
     }
 
     private function createPaymentStatuses()
     {
         $statuses = [
-            ['id' => '1', 'name' => 'Pending'],
-            ['id' => '2', 'name' => 'Voided'],
-            ['id' => '3', 'name' => 'Failed'],
-            ['id' => '4', 'name' => 'Completed'],
-            ['id' => '5', 'name' => 'Partially Refunded'],
-            ['id' => '6', 'name' => 'Refunded'],
+          ['id' => '1', 'name' => 'Pending'],
+          ['id' => '2', 'name' => 'Voided'],
+          ['id' => '3', 'name' => 'Failed'],
+          ['id' => '4', 'name' => 'Completed'],
+          ['id' => '5', 'name' => 'Partially Refunded'],
+          ['id' => '6', 'name' => 'Refunded'],
         ];
-
         foreach ($statuses as $status) {
             $record = PaymentStatus::find($status['id']);
             if ($record) {

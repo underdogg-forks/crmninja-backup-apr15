@@ -14,15 +14,15 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     private $openRoutes = [
-        'complete*',
-        'signup/register',
-        'api/v1/*',
-        'hook/email_opened',
-        'hook/email_bounced',
-        'reseller_stats',
-        'payment_hook/*',
-        'buy_now*',
-        'hook/bot/*',
+      'complete*',
+      'signup/register',
+      'api/v1/*',
+      'hook/email_opened',
+      'hook/email_bounced',
+      'reseller_stats',
+      'payment_hook/*',
+      'buy_now*',
+      'hook/bot/*',
     ];
 
     /**
@@ -40,7 +40,6 @@ class VerifyCsrfToken extends BaseVerifier
                 return $next($request);
             }
         }
-
         return parent::handle($request, $next);
     }
 }

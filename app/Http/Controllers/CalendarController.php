@@ -15,10 +15,9 @@ class CalendarController extends BaseController
     public function showCalendar()
     {
         $data = [
-            'title' => trans('texts.calendar'),
-            'account' => auth()->user()->account,
+          'title' => trans('texts.calendar'),
+          'account' => auth()->user()->account,
         ];
-
         return view('calendar', $data);
     }
 
@@ -29,7 +28,6 @@ class CalendarController extends BaseController
         } else {
             $events = [];
         }
-
         return response()->json($events);
     }
 

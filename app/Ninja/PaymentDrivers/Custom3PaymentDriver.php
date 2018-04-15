@@ -7,7 +7,7 @@ class Custom3PaymentDriver extends BasePaymentDriver
     public function gatewayTypes()
     {
         return [
-            GATEWAY_TYPE_CUSTOM3,
+          GATEWAY_TYPE_CUSTOM3,
         ];
     }
 }

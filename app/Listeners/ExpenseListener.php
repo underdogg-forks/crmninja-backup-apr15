@@ -34,6 +34,6 @@ class ExpenseListener
     {
         // Release any tasks associated with the deleted invoice
         Expense::where('invoice_id', '=', $event->invoice->id)
-                ->update(['invoice_id' => null]);
+          ->update(['invoice_id' => null]);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Client;
 use App\Ninja\Datatables\ProposalSnippetDatatable;
 use App\Ninja\Repositories\ProposalSnippetRepository;
 
@@ -25,20 +24,12 @@ class ProposalSnippetService extends BaseService
      * CreditService constructor.
      *
      * @param ProposalSnippetRepository $creditRepo
-     * @param DatatableService  $datatableService
+     * @param DatatableService $datatableService
      */
     public function __construct(ProposalSnippetRepository $proposalSnippetRepo, DatatableService $datatableService)
     {
         $this->proposalSnippetRepo = $proposalSnippetRepo;
         $this->datatableService = $datatableService;
-    }
-
-    /**
-     * @return CreditRepository
-     */
-    protected function getRepo()
-    {
-        return $this->proposalSnippetRepo;
     }
 
     /**
@@ -63,9 +54,15 @@ class ProposalSnippetService extends BaseService
     {
         // we don't support bulk edit and hide the client on the individual client page
         $datatable = new ProposalSnippetDatatable();
-
         $query = $this->proposalSnippetRepo->find($search, $userId);
-
         return $this->datatableService->createDatatable($datatable, $query);
+    }
+
+    /**
+     * @return CreditRepository
+     */
+    protected function getRepo()
+    {
+        return $this->proposalSnippetRepo;
     }
 }

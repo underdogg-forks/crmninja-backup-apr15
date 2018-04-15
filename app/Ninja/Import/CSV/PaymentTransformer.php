@@ -19,10 +19,10 @@ class PaymentTransformer extends BaseTransformer
     {
         return new Item($data, function ($data) {
             return [
-                'amount' => $this->getFloat($data, 'paid'),
-                'payment_date_sql' => isset($data->invoice_date) ? $data->invoice_date : null,
-                'client_id' => $data->client_id,
-                'invoice_id' => $data->invoice_id,
+              'amount' => $this->getFloat($data, 'paid'),
+              'payment_date_sql' => isset($data->invoice_date) ? $data->invoice_date : null,
+              'client_id' => $data->client_id,
+              'invoice_id' => $data->invoice_id,
             ];
         });
     }

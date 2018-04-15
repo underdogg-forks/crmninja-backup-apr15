@@ -17,6 +17,6 @@ class TaskListener
     {
         // Release any tasks associated with the deleted invoice
         Task::where('invoice_id', '=', $event->invoice->id)
-                ->update(['invoice_id' => null]);
+          ->update(['invoice_id' => null]);
     }
 }

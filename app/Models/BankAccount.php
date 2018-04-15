@@ -21,9 +21,9 @@ class BankAccount extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'bank_id',
-        'app_version',
-        'ofx_version',
+      'bank_id',
+      'app_version',
+      'ofx_version',
     ];
 
     /**

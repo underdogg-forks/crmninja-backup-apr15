@@ -19,7 +19,6 @@ class AddDocuments extends Migration
             $table->boolean('invoice_embed_documents')->default(0);
             $table->boolean('document_email_attachment')->default(0);
         });
-
         \DB::table('accounts')->update(['logo' => '']);
         Schema::dropIfExists('documents');
         Schema::create('documents', function ($t) {
@@ -40,7 +39,6 @@ class AddDocuments extends Migration
             $t->unsignedInteger('height')->nullable();
             $t->timestamps();
         });
-
         Schema::table('documents', function ($t) {
             $t->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
             $t->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -65,7 +63,6 @@ class AddDocuments extends Migration
             $table->dropColumn('invoice_embed_documents');
             $table->dropColumn('document_email_attachment');
         });
-
         Schema::dropIfExists('documents');
     }
 }

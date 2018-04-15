@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
 use App\Http\Requests\CreateProductRequest;
+use App\Http\Requests\ProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Ninja\Repositories\ProductRepository;
@@ -31,7 +31,6 @@ class ProductApiController extends BaseAPIController
     public function __construct(ProductRepository $productRepo)
     {
         parent::__construct();
-
         $this->productRepo = $productRepo;
     }
 
@@ -55,9 +54,8 @@ class ProductApiController extends BaseAPIController
     public function index()
     {
         $products = Product::scope()
-                        ->withTrashed()
-                        ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($products);
     }
 
@@ -114,7 +112,6 @@ class ProductApiController extends BaseAPIController
     public function store(CreateProductRequest $request)
     {
         $product = $this->productRepo->save($request->input());
-
         return $this->itemResponse($product);
     }
 
@@ -153,11 +150,9 @@ class ProductApiController extends BaseAPIController
         if ($request->action) {
             return $this->handleAction($request);
         }
-
         $data = $request->input();
         $data['public_id'] = $publicId;
         $product = $this->productRepo->save($data, $request->entity());
-
         return $this->itemResponse($product);
     }
 
@@ -184,12 +179,10 @@ class ProductApiController extends BaseAPIController
      *   )
      * )
      */
-     public function destroy(UpdateProductRequest $request)
-     {
-         $product = $request->entity();
-
-         $this->productRepo->delete($product);
-
-         return $this->itemResponse($product);
-     }
+    public function destroy(UpdateProductRequest $request)
+    {
+        $product = $request->entity();
+        $this->productRepo->delete($product);
+        return $this->itemResponse($product);
+    }
 }

@@ -23,13 +23,13 @@ class Project extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'name',
-        'task_rate',
-        'private_notes',
-        'due_date',
-        'budgeted_hours',
-        'custom_value1',
-        'custom_value2',
+      'name',
+      'task_rate',
+      'private_notes',
+      'due_date',
+      'budgeted_hours',
+      'custom_value1',
+      'custom_value2',
     ];
 
     /**
@@ -93,7 +93,6 @@ class Project extends EntityModel
 Project::creating(function ($project) {
     $project->setNullValues();
 });
-
 Project::updating(function ($project) {
     $project->setNullValues();
 });

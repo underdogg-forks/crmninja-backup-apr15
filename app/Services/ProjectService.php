@@ -25,20 +25,12 @@ class ProjectService extends BaseService
      * CreditService constructor.
      *
      * @param ProjectRepository $creditRepo
-     * @param DatatableService  $datatableService
+     * @param DatatableService $datatableService
      */
     public function __construct(ProjectRepository $projectRepo, DatatableService $datatableService)
     {
         $this->projectRepo = $projectRepo;
         $this->datatableService = $datatableService;
-    }
-
-    /**
-     * @return CreditRepository
-     */
-    protected function getRepo()
-    {
-        return $this->projectRepo;
     }
 
     /**
@@ -52,7 +44,6 @@ class ProjectService extends BaseService
         if (isset($data['client_id']) && $data['client_id']) {
             $data['client_id'] = Client::getPrivateId($data['client_id']);
         }
-
         return $this->projectRepo->save($data, $project);
     }
 
@@ -67,9 +58,15 @@ class ProjectService extends BaseService
     {
         // we don't support bulk edit and hide the client on the individual client page
         $datatable = new ProjectDatatable();
-
         $query = $this->projectRepo->find($search, $userId);
-
         return $this->datatableService->createDatatable($datatable, $query);
+    }
+
+    /**
+     * @return CreditRepository
+     */
+    protected function getRepo()
+    {
+        return $this->projectRepo;
     }
 }

@@ -1,7 +1,5 @@
 <?php
-
 return array(
-
     /*
     |--------------------------------------------------------------------------
     | Password Reminder Language Lines
@@ -12,15 +10,9 @@ return array(
     | has failed, such as for an invalid token or invalid new password.
     |
     */
-
-    "password" => "Passwords skal minimum være 6 tegn og matche sikkerhedstjekket.",
-
-    "user"     => "Vi kan ikke finde en bruger med den email-adresse.",
-
-    "token"    => "Password-nulstillingskoden er ugyldig.",
-
-    "sent"     => "Password-påmindelse sendt!",
-
-    "reset"    => "Password has been reset!",
-
+  "password" => "Passwords skal minimum være 6 tegn og matche sikkerhedstjekket.",
+  "user" => "Vi kan ikke finde en bruger med den email-adresse.",
+  "token" => "Password-nulstillingskoden er ugyldig.",
+  "sent" => "Password-påmindelse sendt!",
+  "reset" => "Password has been reset!",
 );

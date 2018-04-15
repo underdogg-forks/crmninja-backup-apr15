@@ -1,5 +1,5 @@
 <div id="toolbar-toolbar" class="toolbar ql-toolbar ql-snow" style="padding-left:0px;padding-right:0px">
-    <div id="{{ $name }}Toolbar" class="toolbar" style="padding-left: 0px">
+  <div id="{{ $name }}Toolbar" class="toolbar" style="padding-left: 0px">
         <span class="ql-format-group">
             <select title="Font" class="ql-font">
                 <option value="sans-serif" selected="">Sans Serif</option>
@@ -13,7 +13,7 @@
                 <option value="32px">Huge</option>
             </select>
         </span>
-        <span class="ql-format-group">
+    <span class="ql-format-group">
             <span title="Bold" class="ql-format-button ql-bold"></span>
             <span class="ql-format-separator"></span>
             <span title="Italic" class="ql-format-button ql-italic"></span>
@@ -22,7 +22,7 @@
             <span class="ql-format-separator"></span>
             <span title="Strikethrough" class="ql-format-button ql-strike"></span>
         </span>
-        <span class="ql-format-group">
+    <span class="ql-format-group">
             <select title="Text Color" class="ql-color">
                 <option value="rgb(0, 0, 0)" label="rgb(0, 0, 0)" selected=""></option>
                 <option value="rgb(230, 0, 0)" label="rgb(230, 0, 0)"></option>
@@ -99,7 +99,7 @@
                 <option value="rgb(61, 20, 102)" label="rgb(61, 20, 102)"></option>
             </select>
         </span>
-        <span class="ql-format-group">
+    <span class="ql-format-group">
             <span title="List" class="ql-format-button ql-list"></span>
             <span class="ql-format-separator"></span>
             <span title="Bullet" class="ql-format-button ql-bullet"></span>
@@ -111,8 +111,8 @@
                 <option value="justify" label="Justify"></option>
             </select>
         </span>
-        <span class="ql-format-group">
+    <span class="ql-format-group">
             <span title="Link" class="ql-format-button ql-link"></span>
         </span>
-    </div>
+  </div>
 </div>

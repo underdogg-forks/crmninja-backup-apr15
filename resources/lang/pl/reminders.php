@@ -1,7 +1,5 @@
 <?php
-
 return array(
-
     /*
     |--------------------------------------------------------------------------
     | Password Reminder Language Lines
@@ -12,13 +10,8 @@ return array(
     | has failed, such as for an invalid token or invalid new password.
     |
     */
-
-    "password" => "Hasło musi mieć conajmniej sześć znaków i być takie samo jak potwierdzające.",
-
-    "user" => "Użytkownik o podanym adresie e-mail nie istnieje.",
-
-    "token" => "Wprowadzony token jest nieprawidłowy.",
-
-    "sent" => "Przypomnienie hasła zostało wysłane!",
-
+  "password" => "Hasło musi mieć conajmniej sześć znaków i być takie samo jak potwierdzające.",
+  "user" => "Użytkownik o podanym adresie e-mail nie istnieje.",
+  "token" => "Wprowadzony token jest nieprawidłowy.",
+  "sent" => "Przypomnienie hasła zostało wysłane!",
 );

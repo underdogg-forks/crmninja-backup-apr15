@@ -23,35 +23,29 @@ class CreatePaymentAPIRequest extends PaymentRequest
      */
     public function rules()
     {
-        if (! $this->invoice_id || ! $this->amount) {
+        if (!$this->invoice_id || !$this->amount) {
             return [
-                'invoice_id' => 'required|numeric|min:1',
-                'amount' => 'required|numeric',
+              'invoice_id' => 'required|numeric|min:1',
+              'amount' => 'required|numeric',
             ];
         }
-
         $this->invoice = $invoice = Invoice::scope($this->invoice_public_id ?: $this->invoice_id)
-            ->withArchived()
-            ->invoices()
-            ->first();
-
-        if (! $this->invoice) {
+          ->withArchived()
+          ->invoices()
+          ->first();
+        if (!$this->invoice) {
             abort(404, 'Invoice was not found');
         }
-
         $this->merge([
-            'invoice_id' => $invoice->id,
-            'client_id' => $invoice->client->id,
+          'invoice_id' => $invoice->id,
+          'client_id' => $invoice->client->id,
         ]);
-
         $rules = [
-            'amount' => 'required|numeric|not_in:0',
+          'amount' => 'required|numeric|not_in:0',
         ];
-
         if ($this->payment_type_id == PAYMENT_TYPE_CREDIT) {
             $rules['payment_type_id'] = 'has_credit:' . $invoice->client->public_id . ',' . $this->amount;
         }
-
         return $rules;
     }
 }

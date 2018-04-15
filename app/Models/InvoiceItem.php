@@ -22,6 +22,17 @@ class InvoiceItem extends EntityModel
      * @var array
      */
     protected $dates = ['deleted_at'];
+    /**
+     * @var array
+     */
+    protected $fillable = [
+      'tax_name1',
+      'tax_rate1',
+      'tax_name2',
+      'tax_rate2',
+      'invoice_item_type_id',
+      'discount',
+    ];
 
     /**
      * @return mixed
@@ -30,18 +41,6 @@ class InvoiceItem extends EntityModel
     {
         return ENTITY_INVOICE_ITEM;
     }
-
-    /**
-     * @var array
-     */
-    protected $fillable = [
-        'tax_name1',
-        'tax_rate1',
-        'tax_name2',
-        'tax_rate2',
-        'invoice_item_type_id',
-        'discount',
-    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -78,7 +77,6 @@ class InvoiceItem extends EntityModel
     public function amount()
     {
         $amount = $this->cost * $this->qty;
-
         if ($this->discount != 0) {
             if ($this->invoice->is_amount_discount) {
                 $amount -= $this->discount;
@@ -86,17 +84,13 @@ class InvoiceItem extends EntityModel
                 $amount -= $amount * $this->discount / 100;
             }
         }
-
         $preTaxAmount = $amount;
-
         if ($this->tax_rate1) {
             $amount += $preTaxAmount * $this->tax_rate1 / 100;
         }
-
         if ($this->tax_rate2) {
             $amount += $preTaxAmount * $this->tax_rate2 / 100;
         }
-
         return $amount;
     }
 
@@ -113,18 +107,15 @@ class InvoiceItem extends EntityModel
         if ($this->tax_name1 || $this->tax_rate1) {
             return true;
         }
-
         if ($this->tax_name2 || $this->tax_rate2) {
             return false;
         }
-
         return false;
     }
 
     public function costWithDiscount()
     {
         $cost = $this->cost;
-
         if ($this->discount != 0) {
             if ($this->invoice->is_amount_discount) {
                 $cost -= $discount / $this->qty;
@@ -132,7 +123,6 @@ class InvoiceItem extends EntityModel
                 $cost -= $cost * $discount / 100;
             }
         }
-
         return $cost;
     }
 

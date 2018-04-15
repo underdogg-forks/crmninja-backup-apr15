@@ -14,15 +14,13 @@ class AddDefaultQuoteTerms extends Migration
         Schema::table('accounts', function ($table) {
             $table->text('quote_terms')->nullable();
         });
-
         $accounts = DB::table('accounts')
-                        ->orderBy('id')
-                        ->get(['id', 'invoice_terms']);
-
+          ->orderBy('id')
+          ->get(['id', 'invoice_terms']);
         foreach ($accounts as $account) {
             DB::table('accounts')
-                ->where('id', $account->id)
-                ->update(['quote_terms' => $account->invoice_terms]);
+              ->where('id', $account->id)
+              ->update(['quote_terms' => $account->invoice_terms]);
         }
     }
 

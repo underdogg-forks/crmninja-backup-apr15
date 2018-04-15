@@ -30,7 +30,6 @@ class SubscriptionController extends BaseController
     public function __construct(SubscriptionService $subscriptionService)
     {
         //parent::__construct();
-
         $this->subscriptionService = $subscriptionService;
     }
 
@@ -58,14 +57,12 @@ class SubscriptionController extends BaseController
     public function edit($publicId)
     {
         $subscription = Subscription::scope($publicId)->firstOrFail();
-
         $data = [
-            'subscription' => $subscription,
-            'method' => 'PUT',
-            'url' => 'subscriptions/' . $publicId,
-            'title' => trans('texts.edit_subscription'),
+          'subscription' => $subscription,
+          'method' => 'PUT',
+          'url' => 'subscriptions/' . $publicId,
+          'title' => trans('texts.edit_subscription'),
         ];
-
         return View::make('accounts.subscription', $data);
     }
 
@@ -77,6 +74,48 @@ class SubscriptionController extends BaseController
     public function update($publicId)
     {
         return $this->save($publicId);
+    }
+
+    /**
+     * @param bool $subscriptionPublicId
+     *
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function save($subscriptionPublicId = false)
+    {
+        if (Auth::user()->account->hasFeature(FEATURE_API)) {
+            $rules = [
+              'event_id' => 'required',
+              'target_url' => 'required|url',
+            ];
+            if ($subscriptionPublicId) {
+                $subscription = Subscription::scope($subscriptionPublicId)->firstOrFail();
+            } else {
+                $subscription = Subscription::createNew();
+                $subscriptionPublicId = $subscription->public_id;
+            }
+            $validator = Validator::make(Input::all(), $rules);
+            if ($validator->fails()) {
+                return Redirect::to($subscriptionPublicId ? 'subscriptions/edit' : 'subscriptions/create')->withInput()->withErrors($validator);
+            }
+            $subscription->fill(request()->all());
+            $subscription->save();
+            if ($subscriptionPublicId) {
+                $message = trans('texts.updated_subscription');
+            } else {
+                $message = trans('texts.created_subscription');
+            }
+            Session::flash('message', $message);
+        }
+        return redirect('/settings/api_tokens');
+
+        /*
+        if ($subscriptionPublicId) {
+            return Redirect::to('subscriptions/' . $subscriptionPublicId . '/edit');
+        } else {
+            return redirect('/settings/api_tokens');
+        }
+        */
     }
 
     /**
@@ -98,7 +137,6 @@ class SubscriptionController extends BaseController
           'url' => 'subscriptions',
           'title' => trans('texts.add_subscription'),
         ];
-
         return View::make('accounts.subscription', $data);
     }
 
@@ -109,60 +147,8 @@ class SubscriptionController extends BaseController
     {
         $action = Input::get('bulk_action');
         $ids = Input::get('bulk_public_id');
-
         $count = $this->subscriptionService->bulk($ids, $action);
-
         Session::flash('message', trans('texts.archived_subscription'));
-
         return Redirect::to('settings/' . ACCOUNT_API_TOKENS);
-    }
-
-    /**
-     * @param bool $subscriptionPublicId
-     *
-     * @return $this|\Illuminate\Http\RedirectResponse
-     */
-    public function save($subscriptionPublicId = false)
-    {
-        if (Auth::user()->account->hasFeature(FEATURE_API)) {
-            $rules = [
-                'event_id' => 'required',
-                'target_url' => 'required|url',
-            ];
-
-            if ($subscriptionPublicId) {
-                $subscription = Subscription::scope($subscriptionPublicId)->firstOrFail();
-            } else {
-                $subscription = Subscription::createNew();
-                $subscriptionPublicId = $subscription->public_id;
-            }
-
-            $validator = Validator::make(Input::all(), $rules);
-
-            if ($validator->fails()) {
-                return Redirect::to($subscriptionPublicId ? 'subscriptions/edit' : 'subscriptions/create')->withInput()->withErrors($validator);
-            }
-
-            $subscription->fill(request()->all());
-            $subscription->save();
-
-            if ($subscriptionPublicId) {
-                $message = trans('texts.updated_subscription');
-            } else {
-                $message = trans('texts.created_subscription');
-            }
-
-            Session::flash('message', $message);
-        }
-
-        return redirect('/settings/api_tokens');
-
-        /*
-        if ($subscriptionPublicId) {
-            return Redirect::to('subscriptions/' . $subscriptionPublicId . '/edit');
-        } else {
-            return redirect('/settings/api_tokens');
-        }
-        */
     }
 }

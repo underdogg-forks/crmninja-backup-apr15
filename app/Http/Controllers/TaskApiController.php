@@ -20,7 +20,6 @@ class TaskApiController extends BaseAPIController
     public function __construct(TaskRepository $taskRepo)
     {
         parent::__construct();
-
         $this->taskRepo = $taskRepo;
     }
 
@@ -44,10 +43,9 @@ class TaskApiController extends BaseAPIController
     public function index()
     {
         $tasks = Task::scope()
-                        ->withTrashed()
-                        ->with('client', 'invoice', 'project')
-                        ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->with('client', 'invoice', 'project')
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($tasks);
     }
 
@@ -105,17 +103,13 @@ class TaskApiController extends BaseAPIController
     {
         $data = Input::all();
         $taskId = isset($data['id']) ? $data['id'] : false;
-
         if (isset($data['client_id']) && $data['client_id']) {
             $data['client'] = $data['client_id'];
         }
-
         $task = $this->taskRepo->save($taskId, $data);
         $task = Task::scope($task->public_id)->with('client')->first();
-
         $transformer = new TaskTransformer(Auth::user()->account, Input::get('serializer'));
         $data = $this->createItem($task, $transformer, 'task');
-
         return $this->response($data);
     }
 
@@ -149,11 +143,9 @@ class TaskApiController extends BaseAPIController
      */
     public function update(UpdateTaskRequest $request)
     {
-        
-        $task = $request->entity();
-        
-        $task = $this->taskRepo->save($task->public_id, \Illuminate\Support\Facades\Input::all());
 
+        $task = $request->entity();
+        $task = $this->taskRepo->save($task->public_id, \Illuminate\Support\Facades\Input::all());
         return $this->itemResponse($task);
     }
 
@@ -183,9 +175,7 @@ class TaskApiController extends BaseAPIController
     public function destroy(UpdateTaskRequest $request)
     {
         $task = $request->entity();
-
         $this->taskRepo->delete($task);
-
         return $this->itemResponse($task);
     }
 }

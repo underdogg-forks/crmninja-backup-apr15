@@ -19,20 +19,16 @@ class IntegrationController extends Controller
     public function subscribe()
     {
         $eventId = Utils::lookupEventId(trim(Input::get('event')));
-
-        if (! $eventId) {
+        if (!$eventId) {
             return Response::json('Event is invalid', 500);
         }
-
         $subscription = Subscription::createNew();
         $subscription->event_id = $eventId;
         $subscription->target_url = trim(Input::get('target_url'));
         $subscription->save();
-
-        if (! $subscription->id) {
+        if (!$subscription->id) {
             return Response::json('Failed to create subscription', 500);
         }
-
         return Response::json(['id' => $subscription->id], 201);
     }
 }

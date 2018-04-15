@@ -1,16 +1,16 @@
 <script type="application/ld+json">
 [
 @if ($entityType == ENTITY_INVOICE)
-{
-  "@context": "http://schema.org",
-  "@type": "Invoice",
-  "paymentStatus": "{{ $invoice->present()->paymentStatus }}",
+    {
+      "@context": "http://schema.org",
+      "@type": "Invoice",
+      "paymentStatus": "{{ $invoice->present()->paymentStatus }}",
   @if ($invoice->due_date)
-  "paymentDue": "{{ $invoice->due_date }}T00:00:00+00:00",
+      "paymentDue": "{{ $invoice->due_date }}T00:00:00+00:00",
   @endif
-  "provider": {
-    "@type": "Organization",
-    "name": "{{ $account->getDisplayName() }}"
+    "provider": {
+      "@type": "Organization",
+      "name": "{{ $account->getDisplayName() }}"
   },
   "broker": {
     "@type": "Organization",
@@ -27,14 +27,16 @@
   }
 },
 @endif
-{
-  "@context": "http://schema.org",
-  "@type": "EmailMessage",
-  "action": {
-    "@type": "ViewAction",
-    "url": "{{ $link }}",
+  {
+    "@context": "http://schema.org",
+    "@type": "EmailMessage",
+    "action": {
+      "@type": "ViewAction",
+      "url": "{{ $link }}",
     "name": {!! json_encode(trans("texts.view_{$entityType}")) !!}
   }
 }
 ]
+
+
 </script>

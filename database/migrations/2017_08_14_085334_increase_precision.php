@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class IncreasePrecision extends Migration
 {
@@ -16,12 +16,10 @@ class IncreasePrecision extends Migration
             $table->decimal('cost', 15, 4)->change();
             $table->decimal('qty', 15, 4)->default(0)->change();
         });
-
         Schema::table('invoice_items', function ($table) {
             $table->decimal('cost', 15, 4)->change();
             $table->decimal('qty', 15, 4)->default(0)->change();
         });
-
         Schema::table('clients', function ($table) {
             $table->integer('credit_number_counter')->default(1)->nullable();
         });

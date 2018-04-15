@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Client;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
@@ -43,7 +42,6 @@ class RedirectIfAuthenticated
     {
         if (auth()->guard($guard)->check()) {
             Session::reflash();
-
             switch ($guard) {
                 case 'client':
                     if (session('contact_key')) {
@@ -55,7 +53,6 @@ class RedirectIfAuthenticated
                     break;
             }
         }
-
         return $next($request);
     }
 }

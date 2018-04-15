@@ -15,13 +15,11 @@ class AddIsSystemToActivities extends Migration
         Schema::table('activities', function ($table) {
             $table->boolean('is_system')->default(0);
         });
-
         $activities = Activity::where('message', 'like', '%<i>System</i>%')->get();
         foreach ($activities as $activity) {
             $activity->is_system = true;
             $activity->save();
         }
-
         Schema::table('activities', function ($table) {
             $table->dropColumn('message');
         });
@@ -37,7 +35,6 @@ class AddIsSystemToActivities extends Migration
         Schema::table('activities', function ($table) {
             $table->dropColumn('is_system');
         });
-
         Schema::table('activities', function ($table) {
             $table->text('message')->nullable();
         });

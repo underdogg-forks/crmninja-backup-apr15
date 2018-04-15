@@ -14,7 +14,6 @@ class AddInvoiceFooter extends Migration
         Schema::table('accounts', function ($table) {
             $table->text('invoice_footer')->nullable();
         });
-
         Schema::table('invoices', function ($table) {
             $table->text('invoice_footer')->nullable();
         });
@@ -30,7 +29,6 @@ class AddInvoiceFooter extends Migration
         Schema::table('accounts', function ($table) {
             $table->dropColumn('invoice_footer');
         });
-
         Schema::table('invoices', function ($table) {
             $table->dropColumn('invoice_footer');
         });

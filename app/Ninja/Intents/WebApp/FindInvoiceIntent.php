@@ -9,9 +9,7 @@ class FindInvoiceIntent extends InvoiceIntent
     public function process()
     {
         $invoice = $this->requestInvoice();
-
         $url = $invoice ? $invoice->present()->url : '/invoices';
-
         return redirect($url);
     }
 }

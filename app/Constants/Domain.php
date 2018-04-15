@@ -9,6 +9,11 @@ class Domain
     const INVOICENINJA_COM = 1;
     const INVOICE_SERVICES = 2;
 
+    public static function getLinkFromId($id)
+    {
+        return 'https://app.' . static::getDomainFromId($id);
+    }
+
     public static function getDomainFromId($id)
     {
         switch ($id) {
@@ -17,13 +22,7 @@ class Domain
             case static::INVOICE_SERVICES:
                 return 'invoice.services';
         }
-
         return 'invoiceninja.com';
-    }
-
-    public static function getLinkFromId($id)
-    {
-        return 'https://app.' . static::getDomainFromId($id);
     }
 
     public static function getEmailFromId($id)
@@ -33,10 +32,9 @@ class Domain
 
     public static function getCookieDomain($url)
     {
-        if  (! Utils::isNinjaProd() || Utils::isReseller()) {
+        if (!Utils::isNinjaProd() || Utils::isReseller()) {
             return '';
         }
-
         if (strpos($url, '.services') !== false) {
             return '.invoice.services';
         } else {

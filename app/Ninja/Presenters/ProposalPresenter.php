@@ -2,8 +2,8 @@
 
 namespace App\Ninja\Presenters;
 
-use Utils;
 use DropdownButton;
+use Utils;
 
 /**
  * Class ProposalPresenter.
@@ -15,25 +15,20 @@ class ProposalPresenter extends EntityPresenter
         $proposal = $this->entity;
         $invitation = $proposal->invitations->first();
         $actions = [];
-
         $actions[] = ['url' => $invitation->getLink('proposal'), 'label' => trans("texts.view_in_portal")];
-
         $actions[] = DropdownButton::DIVIDER;
-
-        if (! $proposal->trashed()) {
+        if (!$proposal->trashed()) {
             $actions[] = ['url' => 'javascript:onArchiveClick()', 'label' => trans("texts.archive_proposal")];
         }
-        if (! $proposal->is_deleted) {
+        if (!$proposal->is_deleted) {
             $actions[] = ['url' => 'javascript:onDeleteClick()', 'label' => trans("texts.delete_proposal")];
         }
-
         return $actions;
     }
 
     public function htmlDocument()
     {
         $proposal = $this->entity;
-
         $html = "<html>
                     <head>
                         <style>
@@ -47,14 +42,12 @@ class ProposalPresenter extends EntityPresenter
                         {$proposal->html}
                     </body>
                 </html>";
-
         return $html;
     }
 
     public function filename()
     {
         $proposal = $this->entity;
-
         return sprintf('%s_%s.pdf', trans('texts.proposal'), $proposal->invoice->invoice_number);
     }
 }

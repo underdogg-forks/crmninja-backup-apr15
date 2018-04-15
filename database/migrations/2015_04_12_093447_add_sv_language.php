@@ -27,15 +27,12 @@ class AddSvLanguage extends Migration
         if ($language = \App\Models\Language::whereLocale('sv')->first()) {
             $language->delete();
         }
-
         if ($language = \App\Models\Language::whereLocale('es_ES')->first()) {
             $language->delete();
         }
-
         if ($language = \App\Models\Language::whereLocale('fr_CA')->first()) {
             $language->delete();
         }
-
         if ($language = \App\Models\Language::whereLocale('lt')->first()) {
             $language->delete();
         }

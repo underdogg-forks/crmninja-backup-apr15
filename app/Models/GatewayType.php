@@ -16,14 +16,6 @@ class GatewayType extends Eloquent
      */
     public $timestamps = false;
 
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public static function getAliasFromId($id)
     {
         return Utils::getFromCache($id, 'gatewayTypes')->alias;
@@ -32,5 +24,13 @@ class GatewayType extends Eloquent
     public static function getIdFromAlias($alias)
     {
         return Cache::get('gatewayTypes')->where('alias', $alias)->first()->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

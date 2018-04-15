@@ -14,7 +14,6 @@ class SupportLockingAccount extends Migration
         Schema::table('users', function ($table) {
             $table->smallInteger('failed_logins')->nullable();
         });
-
         Schema::table('account_gateways', function ($table) {
             $table->boolean('show_address')->default(true)->nullable();
             $table->boolean('update_address')->default(true)->nullable();
@@ -31,7 +30,6 @@ class SupportLockingAccount extends Migration
         Schema::table('users', function ($table) {
             $table->dropColumn('failed_logins');
         });
-
         Schema::table('account_gateways', function ($table) {
             $table->dropColumn('show_address');
             $table->dropColumn('update_address');

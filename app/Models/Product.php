@@ -26,16 +26,16 @@ class Product extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'product_key',
-        'notes',
-        'cost',
-        'qty',
-        'tax_name1',
-        'tax_rate1',
-        'tax_name2',
-        'tax_rate2',
-        'custom_value1',
-        'custom_value2',
+      'product_key',
+      'notes',
+      'cost',
+      'qty',
+      'tax_name1',
+      'tax_rate1',
+      'tax_name2',
+      'tax_rate2',
+      'custom_value1',
+      'custom_value2',
     ];
 
     /**
@@ -44,11 +44,11 @@ class Product extends EntityModel
     public static function getImportColumns()
     {
         return [
-            'product_key',
-            'notes',
-            'cost',
-            'custom_value1',
-            'custom_value2',
+          'product_key',
+          'notes',
+          'cost',
+          'custom_value1',
+          'custom_value2',
         ];
     }
 
@@ -58,20 +58,12 @@ class Product extends EntityModel
     public static function getImportMap()
     {
         return [
-            'product|item' => 'product_key',
-            'notes|description|details' => 'notes',
-            'cost|amount|price' => 'cost',
-            'custom_value1' => 'custom_value1',
-            'custom_value2' => 'custom_value2',
+          'product|item' => 'product_key',
+          'notes|description|details' => 'notes',
+          'cost|amount|price' => 'cost',
+          'custom_value1' => 'custom_value1',
+          'custom_value2' => 'custom_value2',
         ];
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEntityType()
-    {
-        return ENTITY_PRODUCT;
     }
 
     /**
@@ -82,6 +74,14 @@ class Product extends EntityModel
     public static function findProductByKey($key)
     {
         return self::scope()->where('product_key', '=', $key)->first();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntityType()
+    {
+        return ENTITY_PRODUCT;
     }
 
     /**

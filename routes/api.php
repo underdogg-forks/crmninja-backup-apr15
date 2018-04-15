@@ -1,5 +1,4 @@
 <?php
-
 Route::get('ping', 'AccountApiController@ping');
 Route::post('login', 'AccountApiController@login');
 Route::post('oauth_login', 'AccountApiController@oauthLogin');
@@ -7,7 +6,6 @@ Route::post('register', 'AccountApiController@register');
 Route::get('static', 'AccountApiController@getStaticData');
 Route::get('accounts', 'AccountApiController@show');
 Route::put('accounts', 'AccountApiController@update');
-
 Route::resource('clients', 'ClientApiController');
 Route::resource('contacts', 'ContactApiController');
 Route::get('quotes', 'QuoteApiController@index');

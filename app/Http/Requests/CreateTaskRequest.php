@@ -22,7 +22,7 @@ class CreateTaskRequest extends TaskRequest
     public function rules()
     {
         return [
-            'time_log' => 'time_log',
+          'time_log' => 'time_log',
         ];
     }
 }

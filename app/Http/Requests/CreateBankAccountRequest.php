@@ -24,9 +24,9 @@ class CreateBankAccountRequest extends Request
     public function rules()
     {
         return [
-            'bank_id' => 'required',
-            'bank_username' => 'required',
-            'bank_password' => 'required',
+          'bank_id' => 'required',
+          'bank_username' => 'required',
+          'bank_password' => 'required',
         ];
     }
 }

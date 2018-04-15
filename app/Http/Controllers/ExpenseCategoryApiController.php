@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ExpenseCategoryRequest;
 use App\Http\Requests\CreateExpenseCategoryRequest;
 use App\Http\Requests\UpdateExpenseCategoryRequest;
 use App\Models\ExpenseCategory;
@@ -19,7 +18,6 @@ class ExpenseCategoryApiController extends BaseAPIController
     public function __construct(ExpenseCategoryRepository $categoryRepo, ExpenseCategoryService $categoryService)
     {
         parent::__construct();
-
         $this->categoryRepo = $categoryRepo;
         $this->categoryService = $categoryService;
     }
@@ -44,9 +42,8 @@ class ExpenseCategoryApiController extends BaseAPIController
     public function index()
     {
         $clients = ExpenseCategory::scope()
-            ->orderBy('created_at', 'desc')
-            ->withTrashed();
-
+          ->orderBy('created_at', 'desc')
+          ->withTrashed();
         return $this->listResponse($clients);
     }
 
@@ -103,7 +100,6 @@ class ExpenseCategoryApiController extends BaseAPIController
     public function store(CreateExpenseCategoryRequest $request)
     {
         $category = $this->categoryRepo->save($request->input());
-
         return $this->itemResponse($category);
     }
 
@@ -138,7 +134,6 @@ class ExpenseCategoryApiController extends BaseAPIController
     public function update(UpdateExpenseCategoryRequest $request)
     {
         $category = $this->categoryRepo->save($request->input(), $request->entity());
-
         return $this->itemResponse($category);
     }
 
@@ -168,9 +163,7 @@ class ExpenseCategoryApiController extends BaseAPIController
     public function destroy(UpdateExpenseCategoryRequest $request)
     {
         $entity = $request->entity();
-
         $this->expenseCategoryRepo->delete($entity);
-
         return $this->itemResponse($entity);
     }
 }

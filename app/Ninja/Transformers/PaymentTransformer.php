@@ -2,9 +2,6 @@
 
 namespace App\Ninja\Transformers;
 
-use App\Models\Account;
-use App\Models\Client;
-use App\Models\Invoice;
 use App\Models\Payment;
 
 /**
@@ -21,47 +18,44 @@ class PaymentTransformer extends EntityTransformer
     protected $defaultIncludes = [];
 
     protected $availableIncludes = [
-        'client',
-        'invoice',
+      'client',
+      'invoice',
     ];
 
     public function __construct($account = null, $serializer = null, $invoice = null)
     {
         parent::__construct($account, $serializer);
-
         $this->invoice = $invoice;
     }
 
     public function includeInvoice(Payment $payment)
     {
         $transformer = new InvoiceTransformer($this->account, $this->serializer);
-
         return $this->includeItem($payment->invoice, $transformer, 'invoice');
     }
 
     public function includeClient(Payment $payment)
     {
         $transformer = new ClientTransformer($this->account, $this->serializer);
-
         return $this->includeItem($payment->client, $transformer, 'client');
     }
 
     public function transform(Payment $payment)
     {
         return array_merge($this->getDefaults($payment), [
-            'id' => (int) $payment->public_id,
-            'amount' => (float) $payment->amount,
-            'transaction_reference' => $payment->transaction_reference,
-            'payment_date' => $payment->payment_date,
-            'updated_at' => $this->getTimestamp($payment->updated_at),
-            'archived_at' => $this->getTimestamp($payment->deleted_at),
-            'is_deleted' => (bool) $payment->is_deleted,
-            'payment_type_id' => (int) $payment->payment_type_id,
-            'invoice_id' => (int) ($this->invoice ? $this->invoice->public_id : $payment->invoice->public_id),
-            'invoice_number' => $this->invoice ? $this->invoice->invoice_number : $payment->invoice->invoice_number,
-            'private_notes' => $payment->private_notes,
-            'exchange_rate' => (float) $payment->exchange_rate,
-            'exchange_currency_id' => (int) $payment->exchange_currency_id,
+          'id' => (int)$payment->public_id,
+          'amount' => (float)$payment->amount,
+          'transaction_reference' => $payment->transaction_reference,
+          'payment_date' => $payment->payment_date,
+          'updated_at' => $this->getTimestamp($payment->updated_at),
+          'archived_at' => $this->getTimestamp($payment->deleted_at),
+          'is_deleted' => (bool)$payment->is_deleted,
+          'payment_type_id' => (int)$payment->payment_type_id,
+          'invoice_id' => (int)($this->invoice ? $this->invoice->public_id : $payment->invoice->public_id),
+          'invoice_number' => $this->invoice ? $this->invoice->invoice_number : $payment->invoice->invoice_number,
+          'private_notes' => $payment->private_notes,
+          'exchange_rate' => (float)$payment->exchange_rate,
+          'exchange_currency_id' => (int)$payment->exchange_currency_id,
         ]);
     }
 }

@@ -23,21 +23,13 @@ class UserService extends BaseService
     /**
      * UserService constructor.
      *
-     * @param UserRepository   $userRepo
+     * @param UserRepository $userRepo
      * @param DatatableService $datatableService
      */
     public function __construct(UserRepository $userRepo, DatatableService $datatableService)
     {
         $this->userRepo = $userRepo;
         $this->datatableService = $datatableService;
-    }
-
-    /**
-     * @return UserRepository
-     */
-    protected function getRepo()
-    {
-        return $this->userRepo;
     }
 
     /**
@@ -49,7 +41,14 @@ class UserService extends BaseService
     {
         $datatable = new UserDatatable(false);
         $query = $this->userRepo->find($accountId);
-
         return $this->datatableService->createDatatable($datatable, $query);
+    }
+
+    /**
+     * @return UserRepository
+     */
+    protected function getRepo()
+    {
+        return $this->userRepo;
     }
 }

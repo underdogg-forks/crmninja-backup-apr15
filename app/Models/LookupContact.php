@@ -13,8 +13,8 @@ class LookupContact extends LookupModel
      * @var array
      */
     protected $fillable = [
-        'lookup_account_id',
-        'contact_key',
+      'lookup_account_id',
+      'contact_key',
     ];
 
 }

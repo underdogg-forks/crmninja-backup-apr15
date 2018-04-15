@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | PDO Fetch Style
@@ -12,9 +10,7 @@ return [
     | array format for simplicity. Here you can tweak the fetch style.
     |
     */
-
-    'fetch' => PDO::FETCH_CLASS,
-
+  'fetch' => PDO::FETCH_CLASS,
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -25,9 +21,7 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
-
-    'default' => env('DB_TYPE', 'mysql'),
-
+  'default' => env('DB_TYPE', 'mysql'),
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -43,69 +37,62 @@ return [
     | choice installed on your machine before you begin development.
     |
     */
-
-    'connections' => [
-
-        // single database setup
-        'mysql' => [
-            'driver'    => 'mysql',
-            'host'      => env('DB_HOST', 'localhost'),
-            'database'  => env('DB_DATABASE', 'forge'),
-            'username'  => env('DB_USERNAME', 'forge'),
-            'password'  => env('DB_PASSWORD', ''),
-            'port'      => env('DB_PORT', '3306'),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            'strict'    => env('DB_STRICT', false),
-            'engine'    => 'InnoDB',
-        ],
-
-        // multi-database setup
-        'db-ninja-0' => [
-            'driver'    => 'mysql',
-            'host'      => env('DB_HOST0', env('DB_HOST', 'localhost')),
-            'database'  => env('DB_DATABASE0', env('DB_DATABASE', 'forge')),
-            'username'  => env('DB_USERNAME0', env('DB_USERNAME', 'forge')),
-            'password'  => env('DB_PASSWORD0', env('DB_PASSWORD', '')),
-            'port'      => env('DB_PORT0', env('DB_PORT', '3306')),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            'strict'    => env('DB_STRICT', false),
-            'engine'    => 'InnoDB',
-        ],
-
-        'db-ninja-1' => [
-            'driver'    => 'mysql',
-            'host'      => env('DB_HOST1', env('DB_HOST', 'localhost')),
-            'database'  => env('DB_DATABASE1', env('DB_DATABASE', 'forge')),
-            'username'  => env('DB_USERNAME1', env('DB_USERNAME', 'forge')),
-            'password'  => env('DB_PASSWORD1', env('DB_PASSWORD', '')),
-            'port'      => env('DB_PORT1', env('DB_PORT', '3306')),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            'strict'    => env('DB_STRICT', false),
-            'engine'    => 'InnoDB',
-        ],
-
-        'db-ninja-2' => [
-            'driver'    => 'mysql',
-            'host'      => env('DB_HOST2', env('DB_HOST', 'localhost')),
-            'database'  => env('DB_DATABASE2', env('DB_DATABASE', 'forge')),
-            'username'  => env('DB_USERNAME2', env('DB_USERNAME', 'forge')),
-            'password'  => env('DB_PASSWORD2', env('DB_PASSWORD', '')),
-            'port'      => env('DB_PORT2', env('DB_PORT', '3306')),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            'strict'    => env('DB_STRICT', false),
-            'engine'    => 'InnoDB',
-        ],
-
+  'connections' => [
+      // single database setup
+    'mysql' => [
+      'driver' => 'mysql',
+      'host' => env('DB_HOST', 'localhost'),
+      'database' => env('DB_DATABASE', 'forge'),
+      'username' => env('DB_USERNAME', 'forge'),
+      'password' => env('DB_PASSWORD', ''),
+      'port' => env('DB_PORT', '3306'),
+      'charset' => 'utf8',
+      'collation' => 'utf8_unicode_ci',
+      'prefix' => '',
+      'strict' => env('DB_STRICT', false),
+      'engine' => 'InnoDB',
     ],
-
+      // multi-database setup
+    'db-ninja-0' => [
+      'driver' => 'mysql',
+      'host' => env('DB_HOST0', env('DB_HOST', 'localhost')),
+      'database' => env('DB_DATABASE0', env('DB_DATABASE', 'forge')),
+      'username' => env('DB_USERNAME0', env('DB_USERNAME', 'forge')),
+      'password' => env('DB_PASSWORD0', env('DB_PASSWORD', '')),
+      'port' => env('DB_PORT0', env('DB_PORT', '3306')),
+      'charset' => 'utf8',
+      'collation' => 'utf8_unicode_ci',
+      'prefix' => '',
+      'strict' => env('DB_STRICT', false),
+      'engine' => 'InnoDB',
+    ],
+    'db-ninja-1' => [
+      'driver' => 'mysql',
+      'host' => env('DB_HOST1', env('DB_HOST', 'localhost')),
+      'database' => env('DB_DATABASE1', env('DB_DATABASE', 'forge')),
+      'username' => env('DB_USERNAME1', env('DB_USERNAME', 'forge')),
+      'password' => env('DB_PASSWORD1', env('DB_PASSWORD', '')),
+      'port' => env('DB_PORT1', env('DB_PORT', '3306')),
+      'charset' => 'utf8',
+      'collation' => 'utf8_unicode_ci',
+      'prefix' => '',
+      'strict' => env('DB_STRICT', false),
+      'engine' => 'InnoDB',
+    ],
+    'db-ninja-2' => [
+      'driver' => 'mysql',
+      'host' => env('DB_HOST2', env('DB_HOST', 'localhost')),
+      'database' => env('DB_DATABASE2', env('DB_DATABASE', 'forge')),
+      'username' => env('DB_USERNAME2', env('DB_USERNAME', 'forge')),
+      'password' => env('DB_PASSWORD2', env('DB_PASSWORD', '')),
+      'port' => env('DB_PORT2', env('DB_PORT', '3306')),
+      'charset' => 'utf8',
+      'collation' => 'utf8_unicode_ci',
+      'prefix' => '',
+      'strict' => env('DB_STRICT', false),
+      'engine' => 'InnoDB',
+    ],
+  ],
     /*
     |--------------------------------------------------------------------------
     | Migration Repository Table
@@ -116,9 +103,7 @@ return [
     | the migrations on disk haven't actually been run in the database.
     |
     */
-
-    'migrations' => 'migrations',
-
+  'migrations' => 'migrations',
     /*
     |--------------------------------------------------------------------------
     | Redis Databases
@@ -129,17 +114,12 @@ return [
     | such as APC or Memcached. Laravel makes it easy to dig right in.
     |
     */
-
-    'redis' => [
-
-        'cluster' => false,
-
-        'default' => [
-            'host'     => env('REDIS_HOST', '127.0.0.1'),
-            'port'     => 6379,
-            'database' => 0,
-        ],
-
+  'redis' => [
+    'cluster' => false,
+    'default' => [
+      'host' => env('REDIS_HOST', '127.0.0.1'),
+      'port' => 6379,
+      'database' => 0,
     ],
-
+  ],
 ];

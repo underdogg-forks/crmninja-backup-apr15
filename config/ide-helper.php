@@ -1,7 +1,5 @@
-<?php 
-
+<?php
 return array(
-
     /*
     |--------------------------------------------------------------------------
     | Filename & Format
@@ -10,10 +8,8 @@ return array(
     | The default filename (without extension) and the format (php or json)
     |
     */
-
-    'filename'  => '_ide_helper',
-    'format'    => 'php',
-
+  'filename' => '_ide_helper',
+  'format' => 'php',
     /*
     |--------------------------------------------------------------------------
     | Helper files to include
@@ -23,13 +19,10 @@ return array(
     | -- helpers (-H) option. Extra helper files can be included.
     |
     */
-
-    'include_helpers' => false,
-
-    'helper_files' => array(
-        base_path().'/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
-    ),
-
+  'include_helpers' => false,
+  'helper_files' => array(
+    base_path() . '/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
+  ),
     /*
     |--------------------------------------------------------------------------
     | Model locations to include
@@ -39,12 +32,9 @@ return array(
     | for models.
     |
     */
-
-    'model_locations' => array(
-        'app',
-    ),
-
-
+  'model_locations' => array(
+    'app',
+  ),
     /*
     |--------------------------------------------------------------------------
     | Extra classes
@@ -53,25 +43,22 @@ return array(
     | These implementations are not really extended, but called with magic functions
     |
     */
-
-    'extra' => array(
-        'Eloquent' => array('Illuminate\Database\Eloquent\Builder', 'Illuminate\Database\Query\Builder'),
-        'Session' => array('Illuminate\Session\Store'),
-    ),
-
-    'magic' => array(
-        'Log' => array(
-            'debug'     => 'Monolog\Logger::addDebug',
-            'info'      => 'Monolog\Logger::addInfo',
-            'notice'    => 'Monolog\Logger::addNotice',
-            'warning'   => 'Monolog\Logger::addWarning',
-            'error'     => 'Monolog\Logger::addError',
-            'critical'  => 'Monolog\Logger::addCritical',
-            'alert'     => 'Monolog\Logger::addAlert',
-            'emergency' => 'Monolog\Logger::addEmergency',
-        )
-    ),
-    
+  'extra' => array(
+    'Eloquent' => array('Illuminate\Database\Eloquent\Builder', 'Illuminate\Database\Query\Builder'),
+    'Session' => array('Illuminate\Session\Store'),
+  ),
+  'magic' => array(
+    'Log' => array(
+      'debug' => 'Monolog\Logger::addDebug',
+      'info' => 'Monolog\Logger::addInfo',
+      'notice' => 'Monolog\Logger::addNotice',
+      'warning' => 'Monolog\Logger::addWarning',
+      'error' => 'Monolog\Logger::addError',
+      'critical' => 'Monolog\Logger::addCritical',
+      'alert' => 'Monolog\Logger::addAlert',
+      'emergency' => 'Monolog\Logger::addEmergency',
+    )
+  ),
     /*
     |--------------------------------------------------------------------------
     | Interface implementations
@@ -81,9 +68,7 @@ return array(
     | are detected by the helpers, others can be listed below.
     |
     */
-    
-    'interfaces' => array(
-        '\Illuminate\Contracts\Auth\Authenticatable' => config('auth.model', 'App\User'),
-    )
-
+  'interfaces' => array(
+    '\Illuminate\Contracts\Auth\Authenticatable' => config('auth.model', 'App\User'),
+  )
 );

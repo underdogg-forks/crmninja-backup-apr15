@@ -12,14 +12,13 @@ class AccountGatewayToken extends Eloquent
 {
     use SoftDeletes;
     /**
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-    /**
      * @var bool
      */
     public $timestamps = true;
-
+    /**
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
     /**
      * @var array
      */
@@ -29,10 +28,10 @@ class AccountGatewayToken extends Eloquent
      * @var array
      */
     protected $fillable = [
-        'contact_id',
-        'account_gateway_id',
-        'client_id',
-        'token',
+      'contact_id',
+      'account_gateway_id',
+      'client_id',
+      'token',
     ];
 
     /**
@@ -83,7 +82,6 @@ class AccountGatewayToken extends Eloquent
         if ($this->default_payment_method) {
             return $this->default_payment_method->requiresDelayedAutoBill();
         }
-
         return false;
     }
 
@@ -97,8 +95,7 @@ class AccountGatewayToken extends Eloquent
     public function scopeClientAndGateway($query, $clientId, $accountGatewayId)
     {
         $query->where('client_id', '=', $clientId)
-            ->where('account_gateway_id', '=', $accountGatewayId);
-
+          ->where('account_gateway_id', '=', $accountGatewayId);
         return $query;
     }
 
@@ -116,7 +113,6 @@ class AccountGatewayToken extends Eloquent
     public function gatewayLink()
     {
         $accountGateway = $this->account_gateway;
-
         if ($accountGateway->gateway_id == GATEWAY_STRIPE) {
             return "https://dashboard.stripe.com/customers/{$this->token}";
         } elseif ($accountGateway->gateway_id == GATEWAY_BRAINTREE) {

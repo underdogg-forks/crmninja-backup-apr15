@@ -2,34 +2,33 @@
 
 @section('body')
 
-	<style type="text/css">
+  <style type="text/css">
 
-		html, body {
-		    height: 100%;
-		    vertical-align: middle;
-		}
+    html, body
+    {
+      height: 100%;
+      vertical-align: middle;
+    }
 
-		.main_div {
-		    width: 500px;
-		    height: 200px;
-		    
-		    position: absolute;
-		    top:0;
-		    bottom: 0;
-		    left: 0;
-		    right: 0;
+    .main_div
+    {
+      width: 500px;
+      height: 200px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      font-size: 72px;
+      font-family: arial;
+      color: #CCCCCC;
+      margin: auto;
+    }
 
-		    font-size: 72px;
-		    font-family: arial;
-		    color: #CCCCCC;
+  </style>
 
-		    margin: auto;
-		}
-
-	</style>
-
-	<div class="main_div">
-		coming soon
-	</div>
+  <div class="main_div">
+    coming soon
+  </div>
 
 @stop

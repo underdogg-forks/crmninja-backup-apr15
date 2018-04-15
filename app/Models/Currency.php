@@ -19,7 +19,7 @@ class Currency extends Eloquent
      * @var array
      */
     protected $casts = [
-        'swap_currency_symbol' => 'boolean',
+      'swap_currency_symbol' => 'boolean',
     ];
 
     /**

@@ -32,7 +32,6 @@ class AppController extends BaseController
     public function __construct(AccountRepository $accountRepo, Mailer $mailer, EmailService $emailService)
     {
         //parent::__construct();
-
         $this->accountRepo = $accountRepo;
         $this->mailer = $mailer;
         $this->emailService = $emailService;
@@ -43,7 +42,6 @@ class AppController extends BaseController
         if (Utils::isNinjaProd() || (Utils::isDatabaseSetup() && Account::count() > 0)) {
             return Redirect::to('/');
         }
-
         return View::make('setup');
     }
 
@@ -52,36 +50,28 @@ class AppController extends BaseController
         if (Utils::isNinjaProd()) {
             return Redirect::to('/');
         }
-
         $valid = false;
         $test = Input::get('test');
-
         $app = Input::get('app');
         $app['key'] = env('APP_KEY') ?: strtolower(str_random(RANDOM_KEY_LENGTH));
         $app['debug'] = Input::get('debug') ? 'true' : 'false';
         $app['https'] = Input::get('https') ? 'true' : 'false';
-
         $database = Input::get('database');
         $dbType = 'mysql'; // $database['default'];
         $database['connections'] = [$dbType => $database['type']];
         $mail = Input::get('mail');
-
         if ($test == 'mail') {
             return self::testMail($mail);
         }
-
         $valid = self::testDatabase($database);
-
         if ($test == 'db') {
             return $valid === true ? 'Success' : $valid;
-        } elseif (! $valid) {
+        } elseif (!$valid) {
             return Redirect::to('/setup')->withInput();
         }
-
         if (Utils::isDatabaseSetup() && Account::count() > 0) {
             return Redirect::to('/');
         }
-
         $_ENV['APP_ENV'] = 'production';
         $_ENV['APP_DEBUG'] = $app['debug'];
         $_ENV['APP_LOCALE'] = 'en';
@@ -106,7 +96,6 @@ class AppController extends BaseController
         $_ENV['PHANTOMJS_SECRET'] = strtolower(str_random(RANDOM_KEY_LENGTH));
         $_ENV['MAILGUN_DOMAIN'] = $mail['mailgun_domain'];
         $_ENV['MAILGUN_SECRET'] = $mail['mailgun_secret'];
-
         $config = '';
         foreach ($_ENV as $key => $val) {
             if (is_array($val)) {
@@ -117,23 +106,19 @@ class AppController extends BaseController
             }
             $config .= "{$key}={$val}\n";
         }
-
         // Write Config Settings
-        $fp = fopen(base_path().'/.env', 'w');
+        $fp = fopen(base_path() . '/.env', 'w');
         fwrite($fp, $config);
         fclose($fp);
-
-        if (! Utils::isDatabaseSetup()) {
+        if (!Utils::isDatabaseSetup()) {
             // == DB Migrate & Seed == //
             $sqlFile = base_path() . '/database/setup.sql';
             DB::unprepared(file_get_contents($sqlFile));
         }
-
         Cache::flush();
         Artisan::call('db:seed', ['--force' => true, '--class' => 'UpdateSeeder']);
         Artisan::call('optimize', ['--force' => true]);
-
-        if (! Account::count()) {
+        if (!Account::count()) {
             $firstName = trim(Input::get('first_name'));
             $lastName = trim(Input::get('last_name'));
             $email = trim(strtolower(Input::get('email')));
@@ -141,8 +126,44 @@ class AppController extends BaseController
             $account = $this->accountRepo->create($firstName, $lastName, $email, $password);
             $user = $account->users()->first();
         }
-
         return Redirect::to('/login');
+    }
+
+    private function testMail($mail)
+    {
+        $email = $mail['from']['address'];
+        $fromName = $mail['from']['name'];
+        foreach ($mail as $key => $val) {
+            Config::set("mail.{$key}", $val);
+        }
+        Config::set('mail.from.address', $email);
+        Config::set('mail.from.name', $fromName);
+        $data = [
+          'text' => 'Test email',
+          'fromEmail' => $email
+        ];
+        try {
+            $response = $this->mailer->sendTo($email, $email, $fromName, 'Test email', 'contact', $data);
+            return $response === true ? 'Sent' : $response;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    private function testDatabase($database)
+    {
+        $dbType = 'mysql'; // $database['default'];
+        Config::set('database.default', $dbType);
+        foreach ($database['connections'][$dbType] as $key => $val) {
+            Config::set("database.connections.{$dbType}.{$key}", $val);
+        }
+        try {
+            DB::reconnect();
+            $valid = DB::connection()->getDatabaseName() ? true : false;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+        return $valid;
     }
 
     public function updateSetup()
@@ -150,31 +171,25 @@ class AppController extends BaseController
         if (Utils::isNinjaProd()) {
             return Redirect::to('/');
         }
-
-        if (! Auth::check() && Utils::isDatabaseSetup() && Account::count() > 0) {
+        if (!Auth::check() && Utils::isDatabaseSetup() && Account::count() > 0) {
             return Redirect::to('/');
         }
-
-        if (! $canUpdateEnv = @fopen(base_path().'/.env', 'w')) {
-            Session::flash('error', 'Warning: Permission denied to write to .env config file, try running <code>sudo chown www-data:www-data /path/to/ninja/.env</code>');
-
+        if (!$canUpdateEnv = @fopen(base_path() . '/.env', 'w')) {
+            Session::flash('error',
+              'Warning: Permission denied to write to .env config file, try running <code>sudo chown www-data:www-data /path/to/ninja/.env</code>');
             return Redirect::to('/settings/system_settings');
         }
-
         $app = Input::get('app');
         $db = Input::get('database');
         $mail = Input::get('mail');
-
         $_ENV['APP_URL'] = $app['url'];
         $_ENV['APP_DEBUG'] = Input::get('debug') ? 'true' : 'false';
         $_ENV['REQUIRE_HTTPS'] = Input::get('https') ? 'true' : 'false';
-
         $_ENV['DB_TYPE'] = 'mysql'; // $db['default'];
         $_ENV['DB_HOST'] = $db['type']['host'];
         $_ENV['DB_DATABASE'] = $db['type']['database'];
         $_ENV['DB_USERNAME'] = $db['type']['username'];
         $_ENV['DB_PASSWORD'] = $db['type']['password'];
-
         if ($mail) {
             $prefix = '';
             if (($user = auth()->user()) && Account::count() > 1) {
@@ -191,7 +206,6 @@ class AppController extends BaseController
             $_ENV['MAILGUN_DOMAIN'] = $mail['mailgun_domain'];
             $_ENV['MAILGUN_SECRET'] = $mail['mailgun_secret'];
         }
-
         $config = '';
         foreach ($_ENV as $key => $val) {
             if (is_array($val)) {
@@ -202,64 +216,17 @@ class AppController extends BaseController
             }
             $config .= "{$key}={$val}\n";
         }
-
-        $filePath = base_path().'/.env';
+        $filePath = base_path() . '/.env';
         $fp = fopen($filePath, 'w');
         fwrite($fp, $config);
         fclose($fp);
-
         Session::flash('message', trans('texts.updated_settings'));
-
         return Redirect::to('/settings/system_settings');
-    }
-
-    private function testDatabase($database)
-    {
-        $dbType = 'mysql'; // $database['default'];
-        Config::set('database.default', $dbType);
-        foreach ($database['connections'][$dbType] as $key => $val) {
-            Config::set("database.connections.{$dbType}.{$key}", $val);
-        }
-
-        try {
-            DB::reconnect();
-            $valid = DB::connection()->getDatabaseName() ? true : false;
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-
-        return $valid;
-    }
-
-    private function testMail($mail)
-    {
-        $email = $mail['from']['address'];
-        $fromName = $mail['from']['name'];
-
-        foreach ($mail as $key => $val) {
-            Config::set("mail.{$key}", $val);
-        }
-
-        Config::set('mail.from.address', $email);
-        Config::set('mail.from.name', $fromName);
-
-        $data = [
-            'text' => 'Test email',
-            'fromEmail' =>  $email
-        ];
-
-        try {
-            $response = $this->mailer->sendTo($email, $email, $fromName, 'Test email', 'contact', $data);
-
-            return $response === true ? 'Sent' : $response;
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
     }
 
     public function install()
     {
-        if (! Utils::isNinjaProd() && ! Utils::isDatabaseSetup()) {
+        if (!Utils::isNinjaProd() && !Utils::isDatabaseSetup()) {
             try {
                 set_time_limit(60 * 5); // shouldn't take this long but just in case
                 Artisan::call('migrate', ['--force' => true]);
@@ -269,32 +236,31 @@ class AppController extends BaseController
                 Artisan::call('optimize', ['--force' => true]);
             } catch (Exception $e) {
                 Utils::logError($e);
-
                 return Response::make($e->getMessage(), 500);
             }
         }
-
         return Redirect::to('/');
     }
 
     public function update()
     {
-        if (! Utils::isNinjaProd()) {
+        if (!Utils::isNinjaProd()) {
             if ($password = env('UPDATE_SECRET')) {
-                if (! hash_equals($password, request('secret') ?: '')) {
+                if (!hash_equals($password, request('secret') ?: '')) {
                     abort(400, 'Invalid secret: /update?secret=<value>');
                 }
             }
-
             try {
                 set_time_limit(60 * 5);
                 $this->checkInnoDB();
-
                 $cacheCompiled = base_path('bootstrap/cache/compiled.php');
-                if (file_exists($cacheCompiled)) { unlink ($cacheCompiled); }
+                if (file_exists($cacheCompiled)) {
+                    unlink($cacheCompiled);
+                }
                 $cacheServices = base_path('bootstrap/cache/services.json');
-                if (file_exists($cacheServices)) { unlink ($cacheServices); }
-
+                if (file_exists($cacheServices)) {
+                    unlink($cacheServices);
+                }
                 Artisan::call('clear-compiled');
                 Artisan::call('cache:clear');
                 Artisan::call('debugbar:clear');
@@ -308,14 +274,12 @@ class AppController extends BaseController
                 Artisan::call('migrate', ['--force' => true]);
                 Artisan::call('db:seed', ['--force' => true, '--class' => 'UpdateSeeder']);
                 Event::fire(new UserSettingsChanged());
-
                 // legacy fix: check cipher is in .env file
-                if (! env('APP_CIPHER')) {
-                    $fp = fopen(base_path().'/.env', 'a');
+                if (!env('APP_CIPHER')) {
+                    $fp = fopen(base_path() . '/.env', 'a');
                     fwrite($fp, "\nAPP_CIPHER=AES-256-CBC");
                     fclose($fp);
                 }
-
                 // show message with link to Trello board
                 $message = trans('texts.see_whats_new', ['version' => NINJA_VERSION]);
                 $message = link_to(RELEASES_URL, $message, ['target' => '_blank']);
@@ -323,11 +287,9 @@ class AppController extends BaseController
                 Session::flash('warning', $message);
             } catch (Exception $e) {
                 Utils::logError($e);
-
                 return Response::make($e->getMessage(), 500);
             }
         }
-
         return Redirect::to('/');
     }
 
@@ -338,19 +300,15 @@ class AppController extends BaseController
         $result = DB::select("SELECT engine
                     FROM information_schema.TABLES
                     WHERE TABLE_NAME='clients' AND TABLE_SCHEMA='ninja'");
-
         if (count($result) && $result[0]->engine == 'InnoDB') {
             return;
         }
-
         $tables = DB::select('SHOW TABLES');
         $sql = "SET sql_mode = 'ALLOW_INVALID_DATES';\n";
-
-        foreach($tables as $table) {
+        foreach ($tables as $table) {
             $fieldName = 'Tables_in_' . env('DB_DATABASE');
             $sql .= "ALTER TABLE {$table->$fieldName} engine=InnoDB;\n";
         }
-
         DB::unprepared($sql);
     }
 
@@ -358,16 +316,13 @@ class AppController extends BaseController
     {
         $messageId = Input::get('MessageID');
         $error = Input::get('Name') . ': ' . Input::get('Description');
-
         return $this->emailService->markBounced($messageId, $error) ? RESULT_SUCCESS : RESULT_FAILURE;
     }
 
     public function emailOpened()
     {
         $messageId = Input::get('MessageID');
-
         return $this->emailService->markOpened($messageId) ? RESULT_SUCCESS : RESULT_FAILURE;
-
         return RESULT_SUCCESS;
     }
 
@@ -376,13 +331,11 @@ class AppController extends BaseController
         try {
             Artisan::call('ninja:check-data');
             Artisan::call('ninja:init-lookup', ['--validate' => true]);
-
             // check error log is empty
             $errorLog = storage_path('logs/laravel-error.log');
             if (file_exists($errorLog)) {
                 return 'Failure: error log exists';
             }
-
             return RESULT_SUCCESS;
         } catch (Exception $exception) {
             return $exception->getMessage() ?: RESULT_FAILURE;
@@ -394,47 +347,40 @@ class AppController extends BaseController
         if (Utils::isNinjaProd()) {
             return redirect('/');
         }
-
         $errors = Utils::getErrors();
-
         return view('errors.list', compact('errors'));
     }
 
     public function stats()
     {
-        if (! hash_equals(Input::get('password') ?: '', env('RESELLER_PASSWORD'))) {
+        if (!hash_equals(Input::get('password') ?: '', env('RESELLER_PASSWORD'))) {
             sleep(3);
-
             return '';
         }
-
         if (Utils::getResllerType() == RESELLER_REVENUE_SHARE) {
             $data = DB::table('accounts')
-                            ->leftJoin('payments', 'payments.account_id', '=', 'accounts.id')
-                            ->leftJoin('clients', 'clients.id', '=', 'payments.client_id')
-                            ->where('accounts.account_key', '=', NINJA_ACCOUNT_KEY)
-                            ->where('payments.is_deleted', '=', false)
-                            ->get([
-                                'clients.public_id as client_id',
-                                'payments.public_id as payment_id',
-                                'payments.payment_date',
-                                'payments.amount',
-                            ]);
+              ->leftJoin('payments', 'payments.account_id', '=', 'accounts.id')
+              ->leftJoin('clients', 'clients.id', '=', 'payments.client_id')
+              ->where('accounts.account_key', '=', NINJA_ACCOUNT_KEY)
+              ->where('payments.is_deleted', '=', false)
+              ->get([
+                'clients.public_id as client_id',
+                'payments.public_id as payment_id',
+                'payments.payment_date',
+                'payments.amount',
+              ]);
         } else {
             $data = DB::table('users')->count();
         }
-
         return json_encode($data);
     }
 
     public function testHeadless()
     {
         $invoice = Invoice::scope()->orderBy('id')->first();
-
-        if (! $invoice) {
+        if (!$invoice) {
             dd('Please create an invoice to run this test');
         }
-
         header('Content-type:application/pdf');
         echo $invoice->getPDFString();
         exit;
@@ -445,23 +391,18 @@ class AppController extends BaseController
         if (Utils::isNinjaProd()) {
             abort(400, 'Not allowed');
         }
-
         $command = request()->command;
         $options = request()->options ?: [];
         $secret = env('COMMAND_SECRET');
-
-        if (! $secret) {
+        if (!$secret) {
             exit('Set a value for COMMAND_SECRET in the .env file');
-        } elseif (! hash_equals($secret, request()->secret ?: '')) {
+        } elseif (!hash_equals($secret, request()->secret ?: '')) {
             exit('Invalid secret');
         }
-
-        if (! $command || ! in_array($command, ['send-invoices', 'send-reminders', 'update-key'])) {
+        if (!$command || !in_array($command, ['send-invoices', 'send-reminders', 'update-key'])) {
             exit('Invalid command: Valid options are send-invoices, send-reminders or update-key');
         }
-
         Artisan::call('ninja:' . $command, $options);
-
         return response(nl2br(Artisan::output()));
     }
 }

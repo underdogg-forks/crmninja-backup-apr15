@@ -9,9 +9,7 @@ class PagSeguroPaymentDriver extends BasePaymentDriver
     {
         $data = parent::paymentDetails($paymentMethod);
         $data['transactionReference'] = $this->invoice()->invoice_number;
-
         return $data;
     }
-
 
 }

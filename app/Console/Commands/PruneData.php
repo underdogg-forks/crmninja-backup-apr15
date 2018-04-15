@@ -23,12 +23,10 @@ class PruneData extends Command
 
     public function fire()
     {
-        $this->info(date('r').' Running PruneData...');
-
+        $this->info(date('r') . ' Running PruneData...');
         if ($database = $this->option('database')) {
             config(['database.default' => $database]);
         }
-
         // delete accounts who never registered, didn't create any invoices,
         // hansn't logged in within the past 6 months and isn't linked to another account
         $sql = 'select c.id
@@ -46,21 +44,18 @@ class PruneData extends Command
                 and count(t.id) = 0
                 and count(e.id) = 0
                 and count(u.id) = 0';
-
         $results = DB::select($sql);
-
         foreach ($results as $result) {
             $this->info("Deleting company: {$result->id}");
             try {
                 DB::table('companies')
-                    ->where('id', '=', $result->id)
-                    ->delete();
+                  ->where('id', '=', $result->id)
+                  ->delete();
             } catch (\Illuminate\Database\QueryException $e) {
                 // most likely because a user_account record exists which doesn't cascade delete
                 $this->info("Unable to delete companyId: {$result->id}");
             }
         }
-
         $this->info('Done');
     }
 
@@ -78,7 +73,7 @@ class PruneData extends Command
     protected function getOptions()
     {
         return [
-            ['database', null, InputOption::VALUE_OPTIONAL, 'Database', null],
+          ['database', null, InputOption::VALUE_OPTIONAL, 'Database', null],
         ];
     }
 }

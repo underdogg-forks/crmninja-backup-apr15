@@ -13,8 +13,8 @@ class LookupAccountToken extends LookupModel
      * @var array
      */
     protected $fillable = [
-        'lookup_account_id',
-        'token',
+      'lookup_account_id',
+      'token',
     ];
 
 }

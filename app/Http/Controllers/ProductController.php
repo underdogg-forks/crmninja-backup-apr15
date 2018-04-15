@@ -39,7 +39,6 @@ class ProductController extends BaseController
     public function __construct(ProductService $productService, ProductRepository $productRepo)
     {
         //parent::__construct();
-
         $this->productService = $productService;
         $this->productRepo = $productRepo;
     }
@@ -50,17 +49,16 @@ class ProductController extends BaseController
     public function index()
     {
         return View::make('list_wrapper', [
-            'entityType' => ENTITY_PRODUCT,
-            'datatable' => new ProductDatatable(),
-            'title' => trans('texts.products'),
-            'statuses' => Product::getStatuses(),
+          'entityType' => ENTITY_PRODUCT,
+          'datatable' => new ProductDatatable(),
+          'title' => trans('texts.products'),
+          'statuses' => Product::getStatuses(),
         ]);
     }
 
     public function show($publicId)
     {
         Session::reflash();
-
         return Redirect::to("products/$publicId/edit");
     }
 
@@ -86,7 +84,6 @@ class ProductController extends BaseController
     {
         $account = Auth::user()->account;
         $product = Product::scope($publicId)->withTrashed()->firstOrFail();
-
         if ($clone) {
             $product->id = null;
             $product->public_id = null;
@@ -94,10 +91,9 @@ class ProductController extends BaseController
             $url = 'products';
             $method = 'POST';
         } else {
-            $url = 'products/'.$publicId;
+            $url = 'products/' . $publicId;
             $method = 'PUT';
         }
-
         $data = [
           'account' => $account,
           'taxRates' => $account->invoice_item_taxes ? TaxRate::scope()->whereIsInclusive(false)->get() : null,
@@ -107,7 +103,6 @@ class ProductController extends BaseController
           'url' => $url,
           'title' => trans('texts.edit_product'),
         ];
-
         return View::make('accounts.product', $data);
     }
 
@@ -117,16 +112,18 @@ class ProductController extends BaseController
     public function create()
     {
         $account = Auth::user()->account;
-
         $data = [
           'account' => $account,
-          'taxRates' => $account->invoice_item_taxes ? TaxRate::scope()->whereIsInclusive(false)->get(['id', 'name', 'rate']) : null,
+          'taxRates' => $account->invoice_item_taxes ? TaxRate::scope()->whereIsInclusive(false)->get([
+            'id',
+            'name',
+            'rate'
+          ]) : null,
           'product' => null,
           'method' => 'POST',
           'url' => 'products',
           'title' => trans('texts.create_product'),
         ];
-
         return View::make('accounts.product', $data);
     }
 
@@ -136,16 +133,6 @@ class ProductController extends BaseController
     public function store()
     {
         return $this->save();
-    }
-
-    /**
-     * @param $publicId
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update($publicId)
-    {
-        return $this->save($publicId);
     }
 
     /**
@@ -160,17 +147,13 @@ class ProductController extends BaseController
         } else {
             $product = Product::createNew();
         }
-
         $this->productRepo->save(Input::all(), $product);
-
         $message = $productPublicId ? trans('texts.updated_product') : trans('texts.created_product');
         Session::flash('message', $message);
-
         $action = request('action');
         if (in_array($action, ['archive', 'delete', 'restore', 'invoice'])) {
             return self::bulk();
         }
-
         if ($action == 'clone') {
             return redirect()->to(sprintf('products/%s/clone', $product->public_id));
         } else {
@@ -185,7 +168,6 @@ class ProductController extends BaseController
     {
         $action = Input::get('action');
         $ids = Input::get('public_id') ? Input::get('public_id') : Input::get('ids');
-
         if ($action == 'invoice') {
             $products = Product::scope($ids)->get();
             $data = [];
@@ -196,10 +178,18 @@ class ProductController extends BaseController
         } else {
             $count = $this->productService->bulk($ids, $action);
         }
-
-        $message = Utils::pluralize($action.'d_product', $count);
+        $message = Utils::pluralize($action . 'd_product', $count);
         Session::flash('message', $message);
-
         return $this->returnBulk(ENTITY_PRODUCT, $action, $ids);
+    }
+
+    /**
+     * @param $publicId
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update($publicId)
+    {
+        return $this->save($publicId);
     }
 }

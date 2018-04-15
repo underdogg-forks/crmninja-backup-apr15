@@ -2,13 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\InvoiceWasDeleted;
 use App\Events\ClientWasDeleted;
-use App\Events\QuoteWasDeleted;
-use App\Events\TaskWasDeleted;
 use App\Events\ExpenseWasDeleted;
+use App\Events\InvoiceWasDeleted;
 use App\Events\ProjectWasDeleted;
 use App\Events\ProposalWasDeleted;
+use App\Events\QuoteWasDeleted;
+use App\Events\TaskWasDeleted;
 use App\Libraries\HistoryUtils;
 
 /**

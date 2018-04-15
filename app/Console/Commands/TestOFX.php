@@ -33,12 +33,11 @@ class TestOFX extends Command
     public function __construct(BankAccountService $bankAccountService)
     {
         parent::__construct();
-
         $this->bankAccountService = $bankAccountService;
     }
 
     public function fire()
     {
-        $this->info(date('r').' Running TestOFX...');
+        $this->info(date('r') . ' Running TestOFX...');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Ninja\Repositories;
 
-use App\Models\Vendor;
 use App\Models\VendorContact;
 
 // vendor
@@ -11,8 +10,7 @@ class VendorContactRepository extends BaseRepository
     public function save($data)
     {
         $publicId = isset($data['public_id']) ? $data['public_id'] : false;
-
-        if (! $publicId || $publicId == '-1') {
+        if (!$publicId || $publicId == '-1') {
             $contact = VendorContact::createNew();
             //$contact->send_invoice = true;
             $contact->vendor_id = $data['vendor_id'];
@@ -20,10 +18,8 @@ class VendorContactRepository extends BaseRepository
         } else {
             $contact = VendorContact::scope($publicId)->firstOrFail();
         }
-
         $contact->fill($data);
         $contact->save();
-
         return $contact;
     }
 }

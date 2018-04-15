@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddDefaultRates extends Migration
 {
@@ -15,23 +15,18 @@ class AddDefaultRates extends Migration
         Schema::table('accounts', function ($table) {
             $table->decimal('task_rate', 12, 4)->default(0);
         });
-
         Schema::table('clients', function ($table) {
             $table->decimal('task_rate', 12, 4)->default(0);
         });
-
         Schema::table('projects', function ($table) {
             $table->decimal('task_rate', 12, 4)->default(0);
         });
-
         Schema::table('invoices', function ($table) {
             $table->date('partial_due_date')->nullable();
         });
-
         Schema::table('users', function ($table) {
             $table->string('google_2fa_secret')->nullable();
         });
-
         // Add 'Four Months' frequency option
         if (DB::table('frequencies')->count() == 8) {
             DB::table('frequencies')->where('id', '=', 7)->update(['name' => 'Four months']);
@@ -53,19 +48,15 @@ class AddDefaultRates extends Migration
         Schema::table('accounts', function ($table) {
             $table->dropColumn('task_rate');
         });
-
         Schema::table('clients', function ($table) {
             $table->dropColumn('task_rate');
         });
-
         Schema::table('projects', function ($table) {
             $table->dropColumn('task_rate');
         });
-
         Schema::table('invoices', function ($table) {
             $table->dropColumn('partial_due_date');
         });
-
         Schema::table('users', function ($table) {
             $table->dropColumn('google_2fa_secret');
         });

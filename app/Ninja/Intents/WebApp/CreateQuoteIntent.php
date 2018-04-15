@@ -11,15 +11,11 @@ class CreateQuoteIntent extends BaseIntent
     {
         $client = $this->requestClient();
         $clientPublicId = $client ? $client->public_id : null;
-
         //$invoiceItems = $this->requestInvoiceItems();
-
         $url = '/quotes/create/' . $clientPublicId . '?';
         $url .= $this->requestFieldsAsString(Invoice::$requestFields);
-
         $url = rtrim($url, '?');
         $url = rtrim($url, '&');
-
         return redirect($url);
     }
 }

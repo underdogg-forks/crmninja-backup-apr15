@@ -18,7 +18,7 @@ class ExpenseCategory extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'name',
+      'name',
     ];
 
     /**

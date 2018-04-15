@@ -19,7 +19,6 @@ class AddCustomInvoiceFields extends Migration
             $table->text('invoice_fields')->nullable();
             $table->text('devices')->nullable();
         });
-
         Schema::table('invoice_items', function ($table) {
             $table->string('custom_value1')->nullable();
             $table->string('custom_value2')->nullable();
@@ -41,7 +40,6 @@ class AddCustomInvoiceFields extends Migration
             $table->dropColumn('invoice_fields');
             $table->dropColumn('devices');
         });
-
         Schema::table('invoice_items', function ($table) {
             $table->dropColumn('custom_value1');
             $table->dropColumn('custom_value2');

@@ -22,8 +22,8 @@ class CreateProjectRequest extends ProjectRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'client_id' => 'required',
+          'name' => 'required',
+          'client_id' => 'required',
         ];
     }
 }

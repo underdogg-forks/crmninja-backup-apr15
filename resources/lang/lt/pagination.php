@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Puslapiavimo kalbos eilutės
@@ -12,8 +10,6 @@ return [
     | į bet kokias kitas labiau tinkančias Jūsų programai.
     |
     */
-
-    'previous' => '&laquo; Ankstesnis',
-    'next'     => 'Sekantis &raquo;',
-
+  'previous' => '&laquo; Ankstesnis',
+  'next' => 'Sekantis &raquo;',
 ];

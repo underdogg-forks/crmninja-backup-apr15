@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TaxRateRequest;
 use App\Http\Requests\CreateTaxRateRequest;
+use App\Http\Requests\TaxRateRequest;
 use App\Http\Requests\UpdateTaxRateRequest;
 use App\Models\TaxRate;
 use App\Ninja\Repositories\TaxRateRepository;
@@ -28,7 +28,6 @@ class TaxRateApiController extends BaseAPIController
     public function __construct(TaxRateRepository $taxRateRepo)
     {
         parent::__construct();
-
         $this->taxRateRepo = $taxRateRepo;
     }
 
@@ -52,9 +51,8 @@ class TaxRateApiController extends BaseAPIController
     public function index()
     {
         $taxRates = TaxRate::scope()
-                        ->withTrashed()
-                        ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($taxRates);
     }
 
@@ -111,7 +109,6 @@ class TaxRateApiController extends BaseAPIController
     public function store(CreateTaxRateRequest $request)
     {
         $taxRate = $this->taxRateRepo->save($request->input());
-
         return $this->itemResponse($taxRate);
     }
 
@@ -150,11 +147,9 @@ class TaxRateApiController extends BaseAPIController
         if ($request->action) {
             return $this->handleAction($request);
         }
-
         $data = $request->input();
         $data['public_id'] = $publicId;
         $taxRate = $this->taxRateRepo->save($data, $request->entity());
-
         return $this->itemResponse($taxRate);
     }
 
@@ -184,9 +179,7 @@ class TaxRateApiController extends BaseAPIController
     public function destroy(UpdateTaxRateRequest $request)
     {
         $entity = $request->entity();
-
         $this->taxRateRepo->delete($entity);
-
         return $this->itemResponse($entity);
     }
 }

@@ -12,7 +12,6 @@ class TaskRequest extends EntityRequest
     public function sanitize()
     {
         $input = $this->all();
-
         /*
         // check if we're creating a new client
         if ($this->client_id == '-1') {
@@ -25,12 +24,11 @@ class TaskRequest extends EntityRequest
             }
         }
         */
-        
         // check if we're creating a new project
         if ($this->project_id == '-1') {
             $project = [
-                'name' => trim($this->project_name),
-                'client_id' => Client::getPrivateId($this->client_id ?: $this->client),
+              'name' => trim($this->project_name),
+              'client_id' => Client::getPrivateId($this->client_id ?: $this->client),
             ];
             if (Project::validate($project) === true) {
                 $project = app('App\Ninja\Repositories\ProjectRepository')->save($project);
@@ -39,9 +37,7 @@ class TaskRequest extends EntityRequest
                 $input['project_id'] = null;
             }
         }
-
         $this->replace($input);
-
         return $this->all();
     }
 }

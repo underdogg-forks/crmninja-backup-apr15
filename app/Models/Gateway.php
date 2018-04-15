@@ -12,27 +12,43 @@ use Utils;
 class Gateway extends Eloquent
 {
     /**
-     * @var bool
-     */
-    public $timestamps = true;
-
-    protected $fillable = [
-        'provider',
-        'is_offsite',
-        'sort_order',
-    ];
-
-    /**
      * @var array
      */
     public static $gatewayTypes = [
-        GATEWAY_TYPE_CREDIT_CARD,
-        GATEWAY_TYPE_BANK_TRANSFER,
-        GATEWAY_TYPE_PAYPAL,
-        GATEWAY_TYPE_BITCOIN,
-        GATEWAY_TYPE_DWOLLA,
-        GATEWAY_TYPE_TOKEN,
-        GATEWAY_TYPE_GOCARDLESS,
+      GATEWAY_TYPE_CREDIT_CARD,
+      GATEWAY_TYPE_BANK_TRANSFER,
+      GATEWAY_TYPE_PAYPAL,
+      GATEWAY_TYPE_BITCOIN,
+      GATEWAY_TYPE_DWOLLA,
+      GATEWAY_TYPE_TOKEN,
+      GATEWAY_TYPE_GOCARDLESS,
+    ];
+    /**
+     * @var array
+     */
+    public static $preferred = [
+      GATEWAY_PAYPAL_EXPRESS,
+      GATEWAY_STRIPE,
+      GATEWAY_WEPAY,
+      GATEWAY_BRAINTREE,
+      GATEWAY_AUTHORIZE_NET,
+      GATEWAY_MOLLIE,
+      GATEWAY_GOCARDLESS,
+      GATEWAY_CUSTOM1,
+      GATEWAY_CUSTOM2,
+      GATEWAY_CUSTOM3,
+    ];
+    /**
+     * @var array
+     */
+    public static $alternate = [
+      GATEWAY_PAYPAL_EXPRESS,
+      GATEWAY_GOCARDLESS,
+      GATEWAY_BITPAY,
+      GATEWAY_DWOLLA,
+      GATEWAY_CUSTOM1,
+      GATEWAY_CUSTOM2,
+      GATEWAY_CUSTOM3,
     ];
 
     // these will appear in the primary gateway select
@@ -40,17 +56,16 @@ class Gateway extends Eloquent
     /**
      * @var array
      */
-    public static $preferred = [
-        GATEWAY_PAYPAL_EXPRESS,
-        GATEWAY_STRIPE,
-        GATEWAY_WEPAY,
-        GATEWAY_BRAINTREE,
-        GATEWAY_AUTHORIZE_NET,
-        GATEWAY_MOLLIE,
-        GATEWAY_GOCARDLESS,
-        GATEWAY_CUSTOM1,
-        GATEWAY_CUSTOM2,
-        GATEWAY_CUSTOM3,
+    public static $hiddenFields = [
+        // PayPal
+      'headerImageUrl',
+      'solutionType',
+      'landingPage',
+      'brandName',
+      'logoImageUrl',
+      'borderColor',
+        // Dwolla
+      'returnUrl',
     ];
 
     // allow adding these gateway if another gateway
@@ -58,61 +73,24 @@ class Gateway extends Eloquent
     /**
      * @var array
      */
-    public static $alternate = [
-        GATEWAY_PAYPAL_EXPRESS,
-        GATEWAY_GOCARDLESS,
-        GATEWAY_BITPAY,
-        GATEWAY_DWOLLA,
-        GATEWAY_CUSTOM1,
-        GATEWAY_CUSTOM2,
-        GATEWAY_CUSTOM3,
-    ];
-
-    /**
-     * @var array
-     */
-    public static $hiddenFields = [
-        // PayPal
-        'headerImageUrl',
-        'solutionType',
-        'landingPage',
-        'brandName',
-        'logoImageUrl',
-        'borderColor',
-        // Dwolla
-        'returnUrl',
-    ];
-
-    /**
-     * @var array
-     */
     public static $optionalFields = [
         // PayPal
-        'testMode',
-        'developerMode',
+      'testMode',
+      'developerMode',
         // Dwolla
-        'sandbox',
+      'sandbox',
         // Payfast
-        'pdtKey',
+      'pdtKey',
     ];
-
     /**
-     * @return string
+     * @var bool
      */
-    public function getLogoUrl()
-    {
-        return '/images/gateways/logo_'.$this->provider.'.png';
-    }
-
-    /**
-     * @param $gatewayId
-     *
-     * @return bool
-     */
-    public function isGateway($gatewayId)
-    {
-        return $this->id == $gatewayId;
-    }
+    public $timestamps = true;
+    protected $fillable = [
+      'provider',
+      'is_offsite',
+      'sort_order',
+    ];
 
     /**
      * @param $type
@@ -132,8 +110,25 @@ class Gateway extends Eloquent
     public static function hasStandardGateway($gatewayIds)
     {
         $diff = array_diff($gatewayIds, static::$alternate);
-
         return count($diff);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogoUrl()
+    {
+        return '/images/gateways/logo_' . $this->provider . '.png';
+    }
+
+    /**
+     * @param $gatewayId
+     *
+     * @return bool
+     */
+    public function isGateway($gatewayId)
+    {
+        return $this->id == $gatewayId;
     }
 
     /**
@@ -143,10 +138,9 @@ class Gateway extends Eloquent
     public function scopePrimary($query, $accountGatewaysIds)
     {
         $query->where('payment_library_id', '=', 1)
-            ->whereIn('id', static::$preferred)
-            ->whereIn('id', $accountGatewaysIds);
-
-        if (! Utils::isNinja()) {
+          ->whereIn('id', static::$preferred)
+          ->whereIn('id', $accountGatewaysIds);
+        if (!Utils::isNinja()) {
             $query->where('id', '!=', GATEWAY_WEPAY);
         }
     }
@@ -158,8 +152,8 @@ class Gateway extends Eloquent
     public function scopeSecondary($query, $accountGatewaysIds)
     {
         $query->where('payment_library_id', '=', 1)
-            ->whereNotIn('id', static::$preferred)
-            ->whereIn('id', $accountGatewaysIds);
+          ->whereNotIn('id', static::$preferred)
+          ->whereIn('id', $accountGatewaysIds);
     }
 
     /**
@@ -168,7 +162,6 @@ class Gateway extends Eloquent
     public function getHelp()
     {
         $link = '';
-
         if ($this->id == GATEWAY_AUTHORIZE_NET) {
             $link = 'http://reseller.authorize.net/application/?id=5560364';
         } elseif ($this->id == GATEWAY_PAYPAL_EXPRESS) {
@@ -186,13 +179,11 @@ class Gateway extends Eloquent
         } elseif ($this->id == GATEWAY_WEPAY) {
             $link = url('/gateways/create?wepay=true');
         }
-
-        $key = 'texts.gateway_help_'.$this->id;
+        $key = 'texts.gateway_help_' . $this->id;
         $str = trans($key, [
-            'link' => "<a href='$link' >Click here</a>",
-            'complete_link' => url('/complete'),
+          'link' => "<a href='$link' >Click here</a>",
+          'complete_link' => url('/complete'),
         ]);
-
         return $key != $str ? $str : '';
     }
 
@@ -203,8 +194,8 @@ class Gateway extends Eloquent
     {
         if ($this->isCustom()) {
             return [
-                'name' => '',
-                'text' => '',
+              'name' => '',
+              'text' => '',
             ];
         } else {
             return Omnipay::create($this->provider)->getDefaultParameters();

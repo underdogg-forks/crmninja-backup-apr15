@@ -1,5 +1,4 @@
 <?php
-
 return [
     /*
     |--------------------------------------------------------------------------
@@ -11,12 +10,10 @@ return [
     | as required, but they're a perfect start for most applications.
     |
     */
-
-    'defaults' => [
-        'guard' => 'user',
-        'passwords' => 'users',
-    ],
-
+  'defaults' => [
+    'guard' => 'user',
+    'passwords' => 'users',
+  ],
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -33,24 +30,20 @@ return [
     | Supported: "session", "token"
     |
     */
-
-    'guards' => [
-        'user' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-
-        'client' => [
-            'driver' => 'session',
-            'provider' => 'clients',
-        ],
-
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-        ],
+  'guards' => [
+    'user' => [
+      'driver' => 'session',
+      'provider' => 'users',
     ],
-
+    'client' => [
+      'driver' => 'session',
+      'provider' => 'clients',
+    ],
+    'api' => [
+      'driver' => 'token',
+      'provider' => 'users',
+    ],
+  ],
     /*
     |--------------------------------------------------------------------------
     | User Providers
@@ -67,19 +60,16 @@ return [
     | Supported: "database", "eloquent"
     |
     */
-
-    'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-
-        'clients' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Contact::class,
-        ]
+  'providers' => [
+    'users' => [
+      'driver' => 'eloquent',
+      'model' => App\Models\User::class,
     ],
-
+    'clients' => [
+      'driver' => 'eloquent',
+      'model' => App\Models\Contact::class,
+    ]
+  ],
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
@@ -98,18 +88,16 @@ return [
     | they have less time to be guessed. You may change this as needed.
     |
     */
-
-    'passwords' => [
-        'users' => [
-            'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
-        'clients' => [
-            'provider' => 'clients',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
+  'passwords' => [
+    'users' => [
+      'provider' => 'users',
+      'table' => 'password_resets',
+      'expire' => 60,
     ],
-
+    'clients' => [
+      'provider' => 'clients',
+      'table' => 'password_resets',
+      'expire' => 60,
+    ],
+  ],
 ];

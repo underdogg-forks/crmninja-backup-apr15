@@ -32,23 +32,23 @@ class RecurringExpense extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'client_id',
-        'vendor_id',
-        'expense_currency_id',
+      'client_id',
+      'vendor_id',
+      'expense_currency_id',
         //'invoice_currency_id',
         //'exchange_rate',
-        'amount',
-        'private_notes',
-        'public_notes',
-        'expense_category_id',
-        'tax_rate1',
-        'tax_name1',
-        'tax_rate2',
-        'tax_name2',
-        'should_be_invoiced',
+      'amount',
+      'private_notes',
+      'public_notes',
+      'expense_category_id',
+      'tax_rate1',
+      'tax_name1',
+      'tax_rate2',
+      'tax_name2',
+      'should_be_invoiced',
         //'start_date',
         //'end_date',
-        'frequency_id',
+      'frequency_id',
     ];
 
     /**
@@ -94,6 +94,14 @@ class RecurringExpense extends EntityModel
     /**
      * @return mixed
      */
+    public function getDisplayName()
+    {
+        return $this->getName();
+    }
+
+    /**
+     * @return mixed
+     */
     public function getName()
     {
         if ($this->public_notes) {
@@ -101,14 +109,6 @@ class RecurringExpense extends EntityModel
         } else {
             return '#' . $this->public_id;
         }
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDisplayName()
-    {
-        return $this->getName();
     }
 
     /**
@@ -136,19 +136,15 @@ class RecurringExpense extends EntityModel
 RecurringExpense::creating(function ($expense) {
     $expense->setNullValues();
 });
-
 RecurringExpense::created(function ($expense) {
     //event(new ExpenseWasCreated($expense));
 });
-
 RecurringExpense::updating(function ($expense) {
     $expense->setNullValues();
 });
-
 RecurringExpense::updated(function ($expense) {
     //event(new ExpenseWasUpdated($expense));
 });
-
 RecurringExpense::deleting(function ($expense) {
     $expense->setNullValues();
 });

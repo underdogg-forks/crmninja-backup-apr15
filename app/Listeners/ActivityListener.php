@@ -71,8 +71,8 @@ class ActivityListener
     public function createdClient(ClientWasCreated $event)
     {
         $this->activityRepo->create(
-            $event->client,
-            ACTIVITY_TYPE_CREATE_CLIENT
+          $event->client,
+          ACTIVITY_TYPE_CREATE_CLIENT
         );
     }
 
@@ -82,8 +82,8 @@ class ActivityListener
     public function deletedClient(ClientWasDeleted $event)
     {
         $this->activityRepo->create(
-            $event->client,
-            ACTIVITY_TYPE_DELETE_CLIENT
+          $event->client,
+          ACTIVITY_TYPE_DELETE_CLIENT
         );
     }
 
@@ -95,10 +95,9 @@ class ActivityListener
         if ($event->client->is_deleted) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->client,
-            ACTIVITY_TYPE_ARCHIVE_CLIENT
+          $event->client,
+          ACTIVITY_TYPE_ARCHIVE_CLIENT
         );
     }
 
@@ -108,8 +107,8 @@ class ActivityListener
     public function restoredClient(ClientWasRestored $event)
     {
         $this->activityRepo->create(
-            $event->client,
-            ACTIVITY_TYPE_RESTORE_CLIENT
+          $event->client,
+          ACTIVITY_TYPE_RESTORE_CLIENT
         );
     }
 
@@ -119,9 +118,9 @@ class ActivityListener
     public function createdInvoice(InvoiceWasCreated $event)
     {
         $this->activityRepo->create(
-            $event->invoice,
-            ACTIVITY_TYPE_CREATE_INVOICE,
-            $event->invoice->getAdjustment()
+          $event->invoice,
+          ACTIVITY_TYPE_CREATE_INVOICE,
+          $event->invoice->getAdjustment()
         );
     }
 
@@ -130,20 +129,17 @@ class ActivityListener
      */
     public function updatedInvoice(InvoiceWasUpdated $event)
     {
-        if (! $event->invoice->isChanged()) {
+        if (!$event->invoice->isChanged()) {
             return;
         }
-
         $backupInvoice = Invoice::with('invoice_items', 'client.account', 'client.contacts')
-                            ->withTrashed()
-                            ->find($event->invoice->id);
-
+          ->withTrashed()
+          ->find($event->invoice->id);
         $activity = $this->activityRepo->create(
-            $event->invoice,
-            ACTIVITY_TYPE_UPDATE_INVOICE,
-            $event->invoice->getAdjustment()
+          $event->invoice,
+          ACTIVITY_TYPE_UPDATE_INVOICE,
+          $event->invoice->getAdjustment()
         );
-
         $activity->json_backup = $backupInvoice->hidePrivateFields()->toJSON();
         $activity->save();
     }
@@ -154,12 +150,11 @@ class ActivityListener
     public function deletedInvoice(InvoiceWasDeleted $event)
     {
         $invoice = $event->invoice;
-
         $this->activityRepo->create(
-            $invoice,
-            ACTIVITY_TYPE_DELETE_INVOICE,
-            $invoice->affectsBalance() ? $invoice->balance * -1 : 0,
-            $invoice->affectsBalance() ? $invoice->getAmountPaid() * -1 : 0
+          $invoice,
+          ACTIVITY_TYPE_DELETE_INVOICE,
+          $invoice->affectsBalance() ? $invoice->balance * -1 : 0,
+          $invoice->affectsBalance() ? $invoice->getAmountPaid() * -1 : 0
         );
     }
 
@@ -171,10 +166,9 @@ class ActivityListener
         if ($event->invoice->is_deleted) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->invoice,
-            ACTIVITY_TYPE_ARCHIVE_INVOICE
+          $event->invoice,
+          ACTIVITY_TYPE_ARCHIVE_INVOICE
         );
     }
 
@@ -184,12 +178,11 @@ class ActivityListener
     public function restoredInvoice(InvoiceWasRestored $event)
     {
         $invoice = $event->invoice;
-
         $this->activityRepo->create(
-            $invoice,
-            ACTIVITY_TYPE_RESTORE_INVOICE,
-            $invoice->affectsBalance() && $event->fromDeleted ? $invoice->balance : 0,
-            $invoice->affectsBalance() && $event->fromDeleted ? $invoice->getAmountPaid() : 0
+          $invoice,
+          ACTIVITY_TYPE_RESTORE_INVOICE,
+          $invoice->affectsBalance() && $event->fromDeleted ? $invoice->balance : 0,
+          $invoice->affectsBalance() && $event->fromDeleted ? $invoice->getAmountPaid() : 0
         );
     }
 
@@ -199,12 +192,12 @@ class ActivityListener
     public function emailedInvoice(InvoiceInvitationWasEmailed $event)
     {
         $this->activityRepo->create(
-            $event->invitation->invoice,
-            ACTIVITY_TYPE_EMAIL_INVOICE,
-            false,
-            false,
-            $event->invitation,
-            $event->notes
+          $event->invitation->invoice,
+          ACTIVITY_TYPE_EMAIL_INVOICE,
+          false,
+          false,
+          $event->invitation,
+          $event->notes
         );
     }
 
@@ -214,11 +207,11 @@ class ActivityListener
     public function viewedInvoice(InvoiceInvitationWasViewed $event)
     {
         $this->activityRepo->create(
-            $event->invoice,
-            ACTIVITY_TYPE_VIEW_INVOICE,
-            false,
-            false,
-            $event->invitation
+          $event->invoice,
+          ACTIVITY_TYPE_VIEW_INVOICE,
+          false,
+          false,
+          $event->invitation
         );
     }
 
@@ -228,8 +221,8 @@ class ActivityListener
     public function createdQuote(QuoteWasCreated $event)
     {
         $this->activityRepo->create(
-            $event->quote,
-            ACTIVITY_TYPE_CREATE_QUOTE
+          $event->quote,
+          ACTIVITY_TYPE_CREATE_QUOTE
         );
     }
 
@@ -238,19 +231,16 @@ class ActivityListener
      */
     public function updatedQuote(QuoteWasUpdated $event)
     {
-        if (! $event->quote->isChanged()) {
+        if (!$event->quote->isChanged()) {
             return;
         }
-
         $backupQuote = Invoice::with('invoice_items', 'client.account', 'client.contacts')
-                            ->withTrashed()
-                            ->find($event->quote->id);
-
+          ->withTrashed()
+          ->find($event->quote->id);
         $activity = $this->activityRepo->create(
-            $event->quote,
-            ACTIVITY_TYPE_UPDATE_QUOTE
+          $event->quote,
+          ACTIVITY_TYPE_UPDATE_QUOTE
         );
-
         $activity->json_backup = $backupQuote->hidePrivateFields()->toJSON();
         $activity->save();
     }
@@ -261,8 +251,8 @@ class ActivityListener
     public function deletedQuote(QuoteWasDeleted $event)
     {
         $this->activityRepo->create(
-            $event->quote,
-            ACTIVITY_TYPE_DELETE_QUOTE
+          $event->quote,
+          ACTIVITY_TYPE_DELETE_QUOTE
         );
     }
 
@@ -274,10 +264,9 @@ class ActivityListener
         if ($event->quote->is_deleted) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->quote,
-            ACTIVITY_TYPE_ARCHIVE_QUOTE
+          $event->quote,
+          ACTIVITY_TYPE_ARCHIVE_QUOTE
         );
     }
 
@@ -287,8 +276,8 @@ class ActivityListener
     public function restoredQuote(QuoteWasRestored $event)
     {
         $this->activityRepo->create(
-            $event->quote,
-            ACTIVITY_TYPE_RESTORE_QUOTE
+          $event->quote,
+          ACTIVITY_TYPE_RESTORE_QUOTE
         );
     }
 
@@ -298,12 +287,12 @@ class ActivityListener
     public function emailedQuote(QuoteInvitationWasEmailed $event)
     {
         $this->activityRepo->create(
-            $event->invitation->invoice,
-            ACTIVITY_TYPE_EMAIL_QUOTE,
-            false,
-            false,
-            $event->invitation,
-            $event->notes
+          $event->invitation->invoice,
+          ACTIVITY_TYPE_EMAIL_QUOTE,
+          false,
+          false,
+          $event->invitation,
+          $event->notes
         );
     }
 
@@ -313,11 +302,11 @@ class ActivityListener
     public function viewedQuote(QuoteInvitationWasViewed $event)
     {
         $this->activityRepo->create(
-            $event->quote,
-            ACTIVITY_TYPE_VIEW_QUOTE,
-            false,
-            false,
-            $event->invitation
+          $event->quote,
+          ACTIVITY_TYPE_VIEW_QUOTE,
+          false,
+          false,
+          $event->invitation
         );
     }
 
@@ -327,11 +316,11 @@ class ActivityListener
     public function approvedQuote(QuoteInvitationWasApproved $event)
     {
         $this->activityRepo->create(
-            $event->quote,
-            ACTIVITY_TYPE_APPROVE_QUOTE,
-            false,
-            false,
-            $event->invitation
+          $event->quote,
+          ACTIVITY_TYPE_APPROVE_QUOTE,
+          false,
+          false,
+          $event->invitation
         );
     }
 
@@ -341,8 +330,8 @@ class ActivityListener
     public function createdCredit(CreditWasCreated $event)
     {
         $this->activityRepo->create(
-            $event->credit,
-            ACTIVITY_TYPE_CREATE_CREDIT
+          $event->credit,
+          ACTIVITY_TYPE_CREATE_CREDIT
         );
     }
 
@@ -352,8 +341,8 @@ class ActivityListener
     public function deletedCredit(CreditWasDeleted $event)
     {
         $this->activityRepo->create(
-            $event->credit,
-            ACTIVITY_TYPE_DELETE_CREDIT
+          $event->credit,
+          ACTIVITY_TYPE_DELETE_CREDIT
         );
     }
 
@@ -365,10 +354,9 @@ class ActivityListener
         if ($event->credit->is_deleted) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->credit,
-            ACTIVITY_TYPE_ARCHIVE_CREDIT
+          $event->credit,
+          ACTIVITY_TYPE_ARCHIVE_CREDIT
         );
     }
 
@@ -378,8 +366,8 @@ class ActivityListener
     public function restoredCredit(CreditWasRestored $event)
     {
         $this->activityRepo->create(
-            $event->credit,
-            ACTIVITY_TYPE_RESTORE_CREDIT
+          $event->credit,
+          ACTIVITY_TYPE_RESTORE_CREDIT
         );
     }
 
@@ -389,12 +377,12 @@ class ActivityListener
     public function createdPayment(PaymentWasCreated $event)
     {
         $this->activityRepo->create(
-            $event->payment,
-            ACTIVITY_TYPE_CREATE_PAYMENT,
-            $event->payment->amount * -1,
-            $event->payment->amount,
-            false,
-            \App::runningInConsole() ? 'auto_billed' : ''
+          $event->payment,
+          ACTIVITY_TYPE_CREATE_PAYMENT,
+          $event->payment->amount * -1,
+          $event->payment->amount,
+          false,
+          \App::runningInConsole() ? 'auto_billed' : ''
         );
     }
 
@@ -404,12 +392,11 @@ class ActivityListener
     public function deletedPayment(PaymentWasDeleted $event)
     {
         $payment = $event->payment;
-
         $this->activityRepo->create(
-            $payment,
-            ACTIVITY_TYPE_DELETE_PAYMENT,
-            $payment->isFailedOrVoided() ? 0 : $payment->getCompletedAmount(),
-            $payment->isFailedOrVoided() ? 0 : $payment->getCompletedAmount() * -1
+          $payment,
+          ACTIVITY_TYPE_DELETE_PAYMENT,
+          $payment->isFailedOrVoided() ? 0 : $payment->getCompletedAmount(),
+          $payment->isFailedOrVoided() ? 0 : $payment->getCompletedAmount() * -1
         );
     }
 
@@ -419,12 +406,11 @@ class ActivityListener
     public function refundedPayment(PaymentWasRefunded $event)
     {
         $payment = $event->payment;
-
         $this->activityRepo->create(
-            $payment,
-            ACTIVITY_TYPE_REFUNDED_PAYMENT,
-            $event->refundAmount,
-            $event->refundAmount * -1
+          $payment,
+          ACTIVITY_TYPE_REFUNDED_PAYMENT,
+          $event->refundAmount,
+          $event->refundAmount * -1
         );
     }
 
@@ -434,12 +420,11 @@ class ActivityListener
     public function voidedPayment(PaymentWasVoided $event)
     {
         $payment = $event->payment;
-
         $this->activityRepo->create(
-            $payment,
-            ACTIVITY_TYPE_VOIDED_PAYMENT,
-            $payment->is_deleted ? 0 : $payment->getCompletedAmount(),
-            $payment->is_deleted ? 0 : $payment->getCompletedAmount() * -1
+          $payment,
+          ACTIVITY_TYPE_VOIDED_PAYMENT,
+          $payment->is_deleted ? 0 : $payment->getCompletedAmount(),
+          $payment->is_deleted ? 0 : $payment->getCompletedAmount() * -1
         );
     }
 
@@ -449,12 +434,11 @@ class ActivityListener
     public function failedPayment(PaymentFailed $event)
     {
         $payment = $event->payment;
-
         $this->activityRepo->create(
-            $payment,
-            ACTIVITY_TYPE_FAILED_PAYMENT,
-            $payment->is_deleted ? 0 : $payment->getCompletedAmount(),
-            $payment->is_deleted ? 0 : $payment->getCompletedAmount() * -1
+          $payment,
+          ACTIVITY_TYPE_FAILED_PAYMENT,
+          $payment->is_deleted ? 0 : $payment->getCompletedAmount(),
+          $payment->is_deleted ? 0 : $payment->getCompletedAmount() * -1
         );
     }
 
@@ -466,10 +450,9 @@ class ActivityListener
         if ($event->payment->is_deleted) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->payment,
-            ACTIVITY_TYPE_ARCHIVE_PAYMENT
+          $event->payment,
+          ACTIVITY_TYPE_ARCHIVE_PAYMENT
         );
     }
 
@@ -479,12 +462,11 @@ class ActivityListener
     public function restoredPayment(PaymentWasRestored $event)
     {
         $payment = $event->payment;
-
         $this->activityRepo->create(
-            $payment,
-            ACTIVITY_TYPE_RESTORE_PAYMENT,
-            $event->fromDeleted && ! $payment->isFailedOrVoided() ? $payment->getCompletedAmount() * -1 : 0,
-            $event->fromDeleted && ! $payment->isFailedOrVoided() ? $payment->getCompletedAmount() : 0
+          $payment,
+          ACTIVITY_TYPE_RESTORE_PAYMENT,
+          $event->fromDeleted && !$payment->isFailedOrVoided() ? $payment->getCompletedAmount() * -1 : 0,
+          $event->fromDeleted && !$payment->isFailedOrVoided() ? $payment->getCompletedAmount() : 0
         );
     }
 
@@ -496,8 +478,8 @@ class ActivityListener
     public function createdTask(TaskWasCreated $event)
     {
         $this->activityRepo->create(
-            $event->task,
-            ACTIVITY_TYPE_CREATE_TASK
+          $event->task,
+          ACTIVITY_TYPE_CREATE_TASK
         );
     }
 
@@ -508,13 +490,12 @@ class ActivityListener
      */
     public function updatedTask(TaskWasUpdated $event)
     {
-        if (! $event->task->isChanged()) {
+        if (!$event->task->isChanged()) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->task,
-            ACTIVITY_TYPE_UPDATE_TASK
+          $event->task,
+          ACTIVITY_TYPE_UPDATE_TASK
         );
     }
 
@@ -523,46 +504,44 @@ class ActivityListener
         if ($event->task->is_deleted) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->task,
-            ACTIVITY_TYPE_ARCHIVE_TASK
+          $event->task,
+          ACTIVITY_TYPE_ARCHIVE_TASK
         );
     }
 
     public function deletedTask(TaskWasDeleted $event)
     {
         $this->activityRepo->create(
-            $event->task,
-            ACTIVITY_TYPE_DELETE_TASK
+          $event->task,
+          ACTIVITY_TYPE_DELETE_TASK
         );
     }
 
     public function restoredTask(TaskWasRestored $event)
     {
         $this->activityRepo->create(
-            $event->task,
-            ACTIVITY_TYPE_RESTORE_TASK
+          $event->task,
+          ACTIVITY_TYPE_RESTORE_TASK
         );
     }
 
     public function createdExpense(ExpenseWasCreated $event)
     {
         $this->activityRepo->create(
-            $event->expense,
-            ACTIVITY_TYPE_CREATE_EXPENSE
+          $event->expense,
+          ACTIVITY_TYPE_CREATE_EXPENSE
         );
     }
 
     public function updatedExpense(ExpenseWasUpdated $event)
     {
-        if (! $event->expense->isChanged()) {
+        if (!$event->expense->isChanged()) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->expense,
-            ACTIVITY_TYPE_UPDATE_EXPENSE
+          $event->expense,
+          ACTIVITY_TYPE_UPDATE_EXPENSE
         );
     }
 
@@ -571,26 +550,25 @@ class ActivityListener
         if ($event->expense->is_deleted) {
             return;
         }
-
         $this->activityRepo->create(
-            $event->expense,
-            ACTIVITY_TYPE_ARCHIVE_EXPENSE
+          $event->expense,
+          ACTIVITY_TYPE_ARCHIVE_EXPENSE
         );
     }
 
     public function deletedExpense(ExpenseWasDeleted $event)
     {
         $this->activityRepo->create(
-            $event->expense,
-            ACTIVITY_TYPE_DELETE_EXPENSE
+          $event->expense,
+          ACTIVITY_TYPE_DELETE_EXPENSE
         );
     }
 
     public function restoredExpense(ExpenseWasRestored $event)
     {
         $this->activityRepo->create(
-            $event->expense,
-            ACTIVITY_TYPE_RESTORE_EXPENSE
+          $event->expense,
+          ACTIVITY_TYPE_RESTORE_EXPENSE
         );
     }
 }

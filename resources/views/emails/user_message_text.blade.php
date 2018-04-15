@@ -3,12 +3,12 @@
 {!! strip_tags($primaryMessage) !!}
 
 @if (! empty($secondaryMessage))
-    {!! strip_tags($secondaryMessage) !!}
+  {!! strip_tags($secondaryMessage) !!}
 
 @endif
 
 @if (! empty($invoiceLink))
-    {!! $invoiceLink !!}
+  {!! $invoiceLink !!}
 @endif
 
 {!! trans('texts.email_signature') !!}

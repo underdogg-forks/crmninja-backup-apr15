@@ -30,7 +30,6 @@ class TokenController extends BaseController
     public function __construct(TokenService $tokenService)
     {
         //parent::__construct();
-
         $this->tokenService = $tokenService;
     }
 
@@ -58,15 +57,13 @@ class TokenController extends BaseController
     public function edit($publicId)
     {
         $token = AccountToken::where('account_id', '=', Auth::user()->account_id)
-                        ->where('public_id', '=', $publicId)->firstOrFail();
-
+          ->where('public_id', '=', $publicId)->firstOrFail();
         $data = [
-            'token' => $token,
-            'method' => 'PUT',
-            'url' => 'tokens/'.$publicId,
-            'title' => trans('texts.edit_token'),
+          'token' => $token,
+          'method' => 'PUT',
+          'url' => 'tokens/' . $publicId,
+          'title' => trans('texts.edit_token'),
         ];
-
         return View::make('accounts.token', $data);
     }
 
@@ -78,6 +75,43 @@ class TokenController extends BaseController
     public function update($publicId)
     {
         return $this->save($publicId);
+    }
+
+    /**
+     * @param bool $tokenPublicId
+     *
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function save($tokenPublicId = false)
+    {
+        if (Auth::user()->account->hasFeature(FEATURE_API)) {
+            $rules = [
+              'name' => 'required',
+            ];
+            if ($tokenPublicId) {
+                $token = AccountToken::where('account_id', '=', Auth::user()->account_id)
+                  ->where('public_id', '=', $tokenPublicId)->firstOrFail();
+            }
+            $validator = Validator::make(Input::all(), $rules);
+            if ($validator->fails()) {
+                return Redirect::to($tokenPublicId ? 'tokens/edit' : 'tokens/create')->withInput()->withErrors($validator);
+            }
+            if ($tokenPublicId) {
+                $token->name = trim(Input::get('name'));
+            } else {
+                $token = AccountToken::createNew();
+                $token->name = trim(Input::get('name'));
+                $token->token = strtolower(str_random(RANDOM_KEY_LENGTH));
+            }
+            $token->save();
+            if ($tokenPublicId) {
+                $message = trans('texts.updated_token');
+            } else {
+                $message = trans('texts.created_token');
+            }
+            Session::flash('message', $message);
+        }
+        return Redirect::to('settings/' . ACCOUNT_API_TOKENS);
     }
 
     /**
@@ -99,7 +133,6 @@ class TokenController extends BaseController
           'url' => 'tokens',
           'title' => trans('texts.add_token'),
         ];
-
         return View::make('accounts.token', $data);
     }
 
@@ -111,54 +144,7 @@ class TokenController extends BaseController
         $action = Input::get('bulk_action');
         $ids = Input::get('bulk_public_id');
         $count = $this->tokenService->bulk($ids, $action);
-
         Session::flash('message', trans('texts.archived_token'));
-
-        return Redirect::to('settings/' . ACCOUNT_API_TOKENS);
-    }
-
-    /**
-     * @param bool $tokenPublicId
-     *
-     * @return $this|\Illuminate\Http\RedirectResponse
-     */
-    public function save($tokenPublicId = false)
-    {
-        if (Auth::user()->account->hasFeature(FEATURE_API)) {
-            $rules = [
-                'name' => 'required',
-            ];
-
-            if ($tokenPublicId) {
-                $token = AccountToken::where('account_id', '=', Auth::user()->account_id)
-                            ->where('public_id', '=', $tokenPublicId)->firstOrFail();
-            }
-
-            $validator = Validator::make(Input::all(), $rules);
-
-            if ($validator->fails()) {
-                return Redirect::to($tokenPublicId ? 'tokens/edit' : 'tokens/create')->withInput()->withErrors($validator);
-            }
-
-            if ($tokenPublicId) {
-                $token->name = trim(Input::get('name'));
-            } else {
-                $token = AccountToken::createNew();
-                $token->name = trim(Input::get('name'));
-                $token->token = strtolower(str_random(RANDOM_KEY_LENGTH));
-            }
-
-            $token->save();
-
-            if ($tokenPublicId) {
-                $message = trans('texts.updated_token');
-            } else {
-                $message = trans('texts.created_token');
-            }
-
-            Session::flash('message', $message);
-        }
-
         return Redirect::to('settings/' . ACCOUNT_API_TOKENS);
     }
 }

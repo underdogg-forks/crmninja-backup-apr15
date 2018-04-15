@@ -19,7 +19,6 @@ class UserPresenter extends EntityPresenter
         $status = '';
         $user = $this->entity;
         $account = $user->account;
-
         if ($user->confirmed) {
             $status .= 'C';
         } elseif ($user->registered) {
@@ -27,7 +26,6 @@ class UserPresenter extends EntityPresenter
         } else {
             $status .= 'N';
         }
-
         if ($account->isTrial()) {
             $status .= 'T';
         } elseif ($account->isEnterprise()) {
@@ -37,7 +35,6 @@ class UserPresenter extends EntityPresenter
         } else {
             $status .= 'H';
         }
-
         return $status;
     }
 }

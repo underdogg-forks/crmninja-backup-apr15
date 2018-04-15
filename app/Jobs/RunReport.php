@@ -3,10 +3,9 @@
 namespace App\Jobs;
 
 use App;
+use Carbon;
 use Str;
 use Utils;
-use Carbon;
-use App\Jobs\Job;
 
 class RunReport extends Job
 {
@@ -25,18 +24,15 @@ class RunReport extends Job
      */
     public function handle()
     {
-        if (! $this->user->hasPermission('view_all')) {
+        if (!$this->user->hasPermission('view_all')) {
             return false;
         }
-
         $reportType = $this->reportType;
         $config = $this->config;
         $config['subgroup'] = $config['subgroup'] ?: false; // don't yet support charts in export
-
         $isExport = $this->isExport;
         $reportClass = '\\App\\Ninja\\Reports\\' . Str::studly($reportType) . 'Report';
-
-        if (! empty($config['range'])) {
+        if (!empty($config['range'])) {
             switch ($config['range']) {
                 case 'this_month':
                     $startDate = Carbon::now()->firstOfMonth()->toDateString();
@@ -55,25 +51,21 @@ class RunReport extends Job
                     $endDate = Carbon::now()->subYear()->lastOfYear()->toDateString();
                     break;
             }
-        } elseif (! empty($config['start_date_offset'])) {
+        } elseif (!empty($config['start_date_offset'])) {
             $startDate = Carbon::now()->subDays($config['start_date_offset'])->toDateString();
             $endDate = Carbon::now()->subDays($config['end_date_offset'])->toDateString();
         } else {
             $startDate = $config['start_date'];
             $endDate = $config['end_date'];
         }
-
         $report = new $reportClass($startDate, $endDate, $isExport, $config);
         $report->run();
-
         $params = [
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'report' => $report,
+          'startDate' => $startDate,
+          'endDate' => $endDate,
+          'report' => $report,
         ];
-
         $report->exportParams = array_merge($params, $report->results());
-
         return $report;
     }
 }

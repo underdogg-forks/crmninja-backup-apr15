@@ -22,14 +22,13 @@ class ProposalCategory extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'name',
+      'name',
     ];
 
     /**
      * @var string
      */
     //protected $presenter = 'App\Ninja\Presenters\ProjectPresenter';
-
     /**
      * @return mixed
      */

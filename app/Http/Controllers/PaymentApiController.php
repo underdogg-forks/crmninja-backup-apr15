@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PaymentRequest;
 use App\Http\Requests\CreatePaymentAPIRequest;
+use App\Http\Requests\PaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
-use App\Models\Invoice;
 use App\Models\Payment;
 use App\Ninja\Mailers\ContactMailer;
 use App\Ninja\Repositories\PaymentRepository;
@@ -20,10 +19,12 @@ class PaymentApiController extends BaseAPIController
 
     protected $entityType = ENTITY_PAYMENT;
 
-    public function __construct(PaymentRepository $paymentRepo, PaymentService $paymentService, ContactMailer $contactMailer)
-    {
+    public function __construct(
+      PaymentRepository $paymentRepo,
+      PaymentService $paymentService,
+      ContactMailer $contactMailer
+    ) {
         parent::__construct();
-
         $this->paymentRepo = $paymentRepo;
         $this->paymentService = $paymentService;
         $this->contactMailer = $contactMailer;
@@ -49,10 +50,9 @@ class PaymentApiController extends BaseAPIController
     public function index()
     {
         $payments = Payment::scope()
-                        ->withTrashed()
-                        ->with(['invoice'])
-                        ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->with(['invoice'])
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($payments);
     }
 
@@ -110,13 +110,10 @@ class PaymentApiController extends BaseAPIController
     {
         // check payment has been marked sent
         $request->invoice->markSentIfUnsent();
-
         $payment = $this->paymentService->save($request->input(), null, $request->invoice);
-
         if (Input::get('email_receipt')) {
             $this->contactMailer->sendPaymentConfirmation($payment);
         }
-
         return $this->itemResponse($payment);
     }
 
@@ -155,11 +152,9 @@ class PaymentApiController extends BaseAPIController
         if ($request->action) {
             return $this->handleAction($request);
         }
-
         $data = $request->input();
         $data['public_id'] = $publicId;
         $payment = $this->paymentRepo->save($data, $request->entity());
-
         return $this->itemResponse($payment);
     }
 
@@ -189,9 +184,7 @@ class PaymentApiController extends BaseAPIController
     public function destroy(UpdatePaymentRequest $request)
     {
         $payment = $request->entity();
-
         $this->paymentRepo->delete($payment);
-
         return $this->itemResponse($payment);
     }
 }

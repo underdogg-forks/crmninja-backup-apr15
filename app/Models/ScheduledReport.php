@@ -16,9 +16,9 @@ class ScheduledReport extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'frequency',
-        'config',
-        'send_date',
+      'frequency',
+      'config',
+      'send_date',
     ];
 
     /**
@@ -53,7 +53,6 @@ class ScheduledReport extends EntityModel
                 $this->send_date = Carbon::now()->addMonth()->toDateString();
                 break;
         }
-
         $this->save();
     }
 }

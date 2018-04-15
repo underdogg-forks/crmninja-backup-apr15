@@ -25,10 +25,9 @@ class TaskStatus extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'name',
-        'sort_order',
+      'name',
+      'sort_order',
     ];
-
 
     /**
      * @return mixed

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DeleteVendorRequest;
-use App\Http\Requests\VendorRequest;
 use App\Http\Requests\CreateVendorRequest;
+use App\Http\Requests\DeleteVendorRequest;
 use App\Http\Requests\UpdateVendorRequest;
+use App\Http\Requests\VendorRequest;
 use App\Models\Vendor;
 use App\Ninja\Repositories\VendorRepository;
 use Input;
@@ -21,14 +21,12 @@ class VendorApiController extends BaseAPIController
     public function __construct(VendorRepository $vendorRepo)
     {
         parent::__construct();
-
         $this->vendorRepo = $vendorRepo;
     }
 
     public function ping()
     {
         $headers = Utils::getApiHeaders();
-
         return Response::make('', 200, $headers);
     }
 
@@ -52,9 +50,8 @@ class VendorApiController extends BaseAPIController
     public function index()
     {
         $vendors = Vendor::scope()
-                    ->withTrashed()
-                    ->orderBy('created_at', 'desc');
-
+          ->withTrashed()
+          ->orderBy('created_at', 'desc');
         return $this->listResponse($vendors);
     }
 
@@ -111,11 +108,9 @@ class VendorApiController extends BaseAPIController
     public function store(CreateVendorRequest $request)
     {
         $vendor = $this->vendorRepo->save($request->input());
-
         $vendor = Vendor::scope($vendor->public_id)
-                    ->with('country', 'vendor_contacts', 'industry', 'size', 'currency')
-                    ->first();
-
+          ->with('country', 'vendor_contacts', 'industry', 'size', 'currency')
+          ->first();
         return $this->itemResponse($vendor);
     }
 
@@ -154,13 +149,10 @@ class VendorApiController extends BaseAPIController
         if ($request->action) {
             return $this->handleAction($request);
         }
-
         $data = $request->input();
         $data['public_id'] = $publicId;
         $vendor = $this->vendorRepo->save($data, $request->entity());
-
         $vendor->load(['vendor_contacts']);
-
         return $this->itemResponse($vendor);
     }
 
@@ -190,9 +182,7 @@ class VendorApiController extends BaseAPIController
     public function destroy(DeleteVendorRequest $request)
     {
         $vendor = $request->entity();
-
         $this->vendorRepo->delete($vendor);
-
         return $this->itemResponse($vendor);
     }
 }

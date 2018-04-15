@@ -27,8 +27,8 @@ class Credit extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'public_notes',
-        'private_notes',
+      'public_notes',
+      'private_notes',
     ];
 
     /**
@@ -101,16 +101,13 @@ class Credit extends EntityModel
             $applied = $amount;
             $this->balance = $this->balance - $amount;
         }
-
         $this->save();
-
         return $applied;
     }
 }
 
 Credit::creating(function ($credit) {
 });
-
 Credit::created(function ($credit) {
     event(new CreditWasCreated($credit));
 });

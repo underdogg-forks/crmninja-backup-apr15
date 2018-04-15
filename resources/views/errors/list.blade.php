@@ -1,7 +1,7 @@
 @if (count($errors))
-    @foreach ($errors as $error)
-        <p>{{ $error }}</p>
-    @endforeach
+  @foreach ($errors as $error)
+    <p>{{ $error }}</p>
+  @endforeach
 @else
-    There are no errors
+  There are no errors
 @endif

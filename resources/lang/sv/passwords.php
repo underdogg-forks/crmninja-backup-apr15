@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Password Reminder Language Lines
@@ -12,15 +10,9 @@ return [
     | has failed, such as for an invalid token or invalid new password.
     |
     */
-
-    "password" => "Lösenord måste innehålla minst sex tecken och matcha varandra.",
-
-    "user"     => "Vi kan inte hitta en användare med den e-postadressen.",
-
-    "token"    => "Koden för lösenordsåterställning är ogiltig.",
-
-    "sent"     => "Lösenordspåminnelse skickad!",
-
-    "reset"    => "Lösenordet har blivit återställt!",
-
+  "password" => "Lösenord måste innehålla minst sex tecken och matcha varandra.",
+  "user" => "Vi kan inte hitta en användare med den e-postadressen.",
+  "token" => "Koden för lösenordsåterställning är ogiltig.",
+  "sent" => "Lösenordspåminnelse skickad!",
+  "reset" => "Lösenordet har blivit återställt!",
 ];

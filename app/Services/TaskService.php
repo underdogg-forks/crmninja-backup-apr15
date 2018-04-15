@@ -19,21 +19,13 @@ class TaskService extends BaseService
     /**
      * TaskService constructor.
      *
-     * @param TaskRepository   $taskRepo
+     * @param TaskRepository $taskRepo
      * @param DatatableService $datatableService
      */
     public function __construct(TaskRepository $taskRepo, DatatableService $datatableService)
     {
         $this->taskRepo = $taskRepo;
         $this->datatableService = $datatableService;
-    }
-
-    /**
-     * @return TaskRepository
-     */
-    protected function getRepo()
-    {
-        return $this->taskRepo;
     }
 
     /**
@@ -49,13 +41,18 @@ class TaskService extends BaseService
         } else {
             $datatable = new TaskDatatable(true, $clientPublicId);
         }
-
         $query = $this->taskRepo->find($clientPublicId, $projectPublicId, $search);
-
-        if (! Utils::hasPermission('view_all')) {
+        if (!Utils::hasPermission('view_all')) {
             $query->where('tasks.user_id', '=', Auth::user()->id);
         }
-
         return $this->datatableService->createDatatable($datatable, $query);
+    }
+
+    /**
+     * @return TaskRepository
+     */
+    protected function getRepo()
+    {
+        return $this->taskRepo;
     }
 }

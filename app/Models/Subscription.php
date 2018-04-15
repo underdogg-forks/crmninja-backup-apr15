@@ -26,9 +26,9 @@ class Subscription extends EntityModel
      * @var array
      */
     protected $fillable = [
-        'event_id',
-        'target_url',
-        'format',
+      'event_id',
+      'target_url',
+      'format',
     ];
 
     /**

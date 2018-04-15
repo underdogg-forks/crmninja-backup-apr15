@@ -21,12 +21,11 @@ class UpdateProposalRequest extends ProposalRequest
      */
     public function rules()
     {
-        if (! $this->entity()) {
+        if (!$this->entity()) {
             return [];
         }
-
         return [
-            'invoice_id' => 'required',
+          'invoice_id' => 'required',
         ];
     }
 }
