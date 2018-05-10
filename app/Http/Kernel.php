@@ -4,6 +4,9 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
+/**
+ * Kernel.
+ */
 class Kernel extends HttpKernel
 {
     /**
@@ -24,11 +27,15 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
       'web' => [
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \App\Http\Middleware\EncryptCookies::class,
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\VerifyCsrfToken::class,
+
+        \App\Http\Middleware\LanguageMiddleware::class,
+
           //\Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
         \App\Http\Middleware\DuplicateSubmissionCheck::class,
@@ -39,12 +46,12 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\QueryLogging::class,
         \App\Http\Middleware\ApiCheck::class,
       ],
-        /*
+
         'api' => [
             'throttle:60,1',
             'bindings',
         ],
-        */
+
     ];
 
     /**
@@ -57,11 +64,24 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
       'auth' => \App\Http\Middleware\Authenticate::class,
       'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+      //'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
       'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
       'can' => \Illuminate\Auth\Middleware\Authorize::class,
       'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
       'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
       'lookup' => \App\Http\Middleware\DatabaseLookup::class,
       'permissions.required' => \App\Http\Middleware\PermissionsRequired::class,
+      'roles' => \App\Http\Middleware\CheckRole::class,
+      'role.agent' => \App\Http\Middleware\CheckRoleAgent::class,
+      'role.user' => \App\Http\Middleware\CheckRoleUser::class,
+      'api' => \App\Http\Middleware\ApiKey::class,
+      'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+      'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+      'update' => \App\Http\Middleware\CheckUpdate::class,
+      'board' => \App\Http\Middleware\CheckBoard::class,
+      'install' => \App\Http\Middleware\Install::class,
+      'redirect' => \App\Http\Middleware\Redirect::class,
+      'installer' => \App\Http\Middleware\IsInstalled::class,
+      'force.option' => \App\Http\Middleware\TicketViewURL::class,
     ];
 }
